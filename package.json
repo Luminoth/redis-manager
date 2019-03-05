@@ -4,7 +4,7 @@
   "description": "Redis Manager",
   "author": "Shane Lillie",
   "license": "Apache 2.0",
-  "main": "dist/main-electron.js",
+  "main": "./dist/main-electron.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -18,7 +18,10 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
-    "appId": "org.energonsoftware.redismanager"
+    "appId": "org.energonsoftware.redismanager",
+    "files": [
+      "./dist/main-electron.js"
+    ]
   },
   "private": true,
   "dependencies": {
