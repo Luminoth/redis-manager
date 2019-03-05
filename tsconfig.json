@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist",
     "sourceMap": true,
     "declaration": false,
     "module": "es2015",
@@ -14,6 +14,7 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "strict": true,
     "lib": [
       "es2018",
       "dom"

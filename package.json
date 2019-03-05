@@ -1,13 +1,18 @@
 {
   "name": "redis-manager",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Redis Manager",
+  "author": "Shane Lillie",
+  "license": "Apache 2.0",
+  "main": "dist/main-electron.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "electron": "ng build --base-href ./ && tsc -p electron && electron ."
   },
   "private": true,
   "dependencies": {
@@ -29,10 +34,11 @@
     "@angular/cli": "~7.1.2",
     "@angular/compiler-cli": "~7.1.0",
     "@angular/language-service": "~7.1.0",
-    "@types/node": "~8.9.4",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
+    "electron": "^4.0.7",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.1",
