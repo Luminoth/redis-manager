@@ -1,14 +1,16 @@
-<div fxLayout="row">
-    <div fxFlex="25">
+<as-split direction="horizontal">
+    <as-split-area size="25">
         <app-server-tree></app-server-tree>
-    </div>
-    <div fxLayout="column">
-        <div fxFlex>
-            <app-key-view-container></app-key-view-container>
-        </div>
-        <div fxFlex="25">
-            <app-log-view></app-log-view>
-        </div>
-    </div>
-</div>
+    </as-split-area>
+    <as-split-area size="75">
+        <as-split direction="vertical">
+            <as-split-area size="75">
+                <app-key-view-container></app-key-view-container>
+            </as-split-area>
+            <as-split-area size="25">
+                <app-log-view></app-log-view>
+            </as-split-area>
+        </as-split>
+    </as-split-area>
+</as-split>
 <!--<router-outlet></router-outlet>-->
