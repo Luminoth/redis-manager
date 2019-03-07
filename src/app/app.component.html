@@ -1,3 +1,14 @@
-TODO: stuff
-
-<router-outlet></router-outlet>
+<div fxLayout="row">
+    <div fxFlex="25">
+        <app-server-tree></app-server-tree>
+    </div>
+    <div fxLayout="column">
+        <div fxFlex>
+            <app-key-view-container></app-key-view-container>
+        </div>
+        <div fxFlex="25">
+            <app-log-view></app-log-view>
+        </div>
+    </div>
+</div>
+<!--<router-outlet></router-outlet>-->

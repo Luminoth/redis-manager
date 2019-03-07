@@ -7,10 +7,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppMaterialModule } from './app-material.module';
 
 import { AppComponent } from './app.component';
+import { ServerTreeComponent } from './server-tree/server-tree.component';
+import { LogViewComponent } from './log-view/log-view.component';
+import { KeyViewContainerComponent } from './key-view-container/key-view-container.component';
+import { KeyViewComponent } from './key-view/key-view.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ServerTreeComponent,
+    LogViewComponent,
+    KeyViewContainerComponent,
+    KeyViewComponent
   ],
   imports: [
     BrowserModule,
