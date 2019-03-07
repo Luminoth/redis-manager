@@ -7,7 +7,7 @@ import { IpcRenderer } from 'electron';
 })
 export class IpcService {
 
-  private ipc: IpcRenderer | undefined;
+  private ipc: IpcRenderer;
 
   constructor() {
     this.ipc = require('electron').ipcRenderer;

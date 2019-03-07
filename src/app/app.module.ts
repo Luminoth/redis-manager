@@ -12,6 +12,7 @@ import { ServerTreeComponent } from './server-tree/server-tree.component';
 import { LogViewComponent } from './log-view/log-view.component';
 import { KeyViewContainerComponent } from './key-view-container/key-view-container.component';
 import { KeyViewComponent } from './key-view/key-view.component';
+import { AppViewComponent } from './app-view/app-view.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { KeyViewComponent } from './key-view/key-view.component';
     ServerTreeComponent,
     LogViewComponent,
     KeyViewContainerComponent,
-    KeyViewComponent
+    KeyViewComponent,
+    AppViewComponent
   ],
   imports: [
     BrowserModule,
