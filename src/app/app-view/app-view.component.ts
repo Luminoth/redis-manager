@@ -10,6 +10,8 @@ import { environment } from '../../environments/environment';
 })
 export class AppViewComponent implements OnInit {
 
+  //#region Lifecycle
+
   constructor(private titleService: Title) {
   }
 
@@ -17,4 +19,13 @@ export class AppViewComponent implements OnInit {
     this.titleService.setTitle(`${environment.title}`);
   }
 
+  //#endregion
+
+  onConnectRedis() {
+    console.log('TODO: open redis connection dialog');
+  }
+
+  onSettings() {
+    console.log('TODO: open settings dialog');
+  }
 }

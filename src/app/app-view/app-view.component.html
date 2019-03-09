@@ -1,3 +1,8 @@
+<mat-toolbar color="primary">
+  <button mat-raised-button (click)="onConnectRedis()">Connect to Redis</button>
+  <span class="toolbar-spacer"></span>
+  <button mat-raised-button (click)="onSettings()">Settings</button>
+</mat-toolbar>
 <as-split direction="horizontal">
   <as-split-area size="25">
     <app-server-tree></app-server-tree>
@@ -8,7 +13,7 @@
         <app-key-view-container></app-key-view-container>
       </as-split-area>
       <as-split-area size="25">
-        <app-log-view></app-log-view>
+        <app-bottom-view></app-bottom-view>
       </as-split-area>
     </as-split>
   </as-split-area>

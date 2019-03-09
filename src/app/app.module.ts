@@ -13,6 +13,7 @@ import { LogViewComponent } from './log-view/log-view.component';
 import { KeyViewContainerComponent } from './key-view-container/key-view-container.component';
 import { KeyViewComponent } from './key-view/key-view.component';
 import { AppViewComponent } from './app-view/app-view.component';
+import { BottomViewComponent } from './bottom-view/bottom-view.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AppViewComponent } from './app-view/app-view.component';
     LogViewComponent,
     KeyViewContainerComponent,
     KeyViewComponent,
-    AppViewComponent
+    AppViewComponent,
+    BottomViewComponent
   ],
   imports: [
     BrowserModule,
