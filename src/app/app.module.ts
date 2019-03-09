@@ -8,22 +8,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppMaterialModule } from './app-material.module';
 
 import { AppComponent } from './app.component';
-import { ServerTreeComponent } from './server-tree/server-tree.component';
-import { LogViewComponent } from './log-view/log-view.component';
-import { KeyViewContainerComponent } from './key-view-container/key-view-container.component';
-import { KeyViewComponent } from './key-view/key-view.component';
 import { AppViewComponent } from './app-view/app-view.component';
+import { ServerTreeComponent } from './server-tree/server-tree.component';
+import { TopViewComponent } from './top-view/top-view.component';
+import { KeyViewComponent } from './key-view/key-view.component';
 import { BottomViewComponent } from './bottom-view/bottom-view.component';
+import { LogViewComponent } from './log-view/log-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ServerTreeComponent,
-    LogViewComponent,
-    KeyViewContainerComponent,
-    KeyViewComponent,
     AppViewComponent,
-    BottomViewComponent
+    ServerTreeComponent,
+    TopViewComponent,
+    KeyViewComponent,
+    BottomViewComponent,
+    LogViewComponent
   ],
   imports: [
     BrowserModule,
