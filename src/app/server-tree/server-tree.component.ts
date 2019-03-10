@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 
+import { IpcService } from '../ipc.service';
 import { RedisServer } from '../redis-server';
 
 interface RedisServerNode {
@@ -35,10 +36,15 @@ export class ServerTreeComponent implements OnInit {
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  constructor() {
+  //#region Lifecycle
+
+  constructor(private ipc: IpcService) {
   }
 
   ngOnInit() {
+    console.log(`there are ${this.ipc.config.redisConfig.length} redis servers configured`);
   }
+
+  //#endregion
 
 }

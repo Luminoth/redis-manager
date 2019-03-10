@@ -1,15 +1,29 @@
 import { Injectable } from '@angular/core';
+import { remote } from 'electron';
 
-import { IpcRenderer } from 'electron';
+import { Config } from '../../electron/config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IpcService {
 
-  private ipc: IpcRenderer;
+  //#region Lifecycle
 
   constructor() {
-    this.ipc = require('electron').ipcRenderer;
   }
+
+  //#endregion
+
+  //#region IPC accessors
+
+  get ipc() {
+    return require('electron').ipcRenderer;
+  }
+
+  get config() {
+    return remote.getGlobal('config') as Config;
+  }
+
+  //#endregion
 }

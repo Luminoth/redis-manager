@@ -3,32 +3,27 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as url from 'url';
 
-import { Config } from './config';
-
-let config: Config;
 let win: BrowserWindow | null;
-
-// https://stackabuse.com/reading-and-writing-json-files-with-node-js/
-// https://thisdavej.com/how-to-watch-for-files-changes-in-node-js/
+const configFileName = 'config.json';
 
 function addFileWatcher(filename: fs.PathLike, listener?: ((event: string, filename: string) => void) | undefined) {
-    console.log("Watching file '" + filename + "'...");
+    console.log(`Watching file '${filename}'...`);
     fs.watch(filename, listener);
 }
 
 function loadConfig() {
-    const configPath = path.join(app.getPath('userData'), 'config.json');
+    const configPath = path.join(app.getPath('userData'), configFileName);
 
     // ensure the config file exists
     if (!fs.existsSync(configPath)) {
         fs.writeFileSync(configPath, '{}');
     }
 
-    console.log("Loading config from '" + configPath + "'...");
+    console.log(`Loading config from '${configPath}'...`);
 
     // load it
     const rawConfig = fs.readFileSync(configPath);
-    config = JSON.parse(rawConfig.toString());
+    global.config = JSON.parse(rawConfig.toString());
 
     // watch it
     let reloadWait = false;
@@ -42,9 +37,9 @@ function loadConfig() {
             reloadWait = false;
         }, 100);
 
-        console.log("Reloading config '" + filename + "'...");
+        console.log(`Reloading config '${filename}'...`);
         const rawConfig = fs.readFileSync(configPath);
-        config = JSON.parse(rawConfig.toString());
+        global.config = JSON.parse(rawConfig.toString());
     });
 }
 
@@ -65,7 +60,7 @@ function createWindow() {
     win.loadURL(
         url.format({
             pathname: path.join(__dirname, `/index.html`),
-            protocol: "file:",
+            protocol: 'file:',
             slashes: true
         })
     );
