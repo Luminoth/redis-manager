@@ -3,8 +3,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as url from 'url';
 
-let win: BrowserWindow | null;
+import { Config } from './config';
+
 const configFileName = 'config.json';
+
+let win: BrowserWindow | null = null;
 
 function addFileWatcher(filename: fs.PathLike, listener?: ((event: string, filename: string) => void) | undefined) {
     console.log(`Watching file '${filename}'...`);
@@ -23,7 +26,7 @@ function loadConfig() {
 
     // load it
     const rawConfig = fs.readFileSync(configPath);
-    global.config = JSON.parse(rawConfig.toString());
+    global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
 
     // watch it
     let reloadWait = false;
@@ -39,7 +42,7 @@ function loadConfig() {
 
         console.log(`Reloading config '${filename}'...`);
         const rawConfig = fs.readFileSync(configPath);
-        global.config = JSON.parse(rawConfig.toString());
+        global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
     });
 }
 
@@ -59,13 +62,15 @@ function createWindow() {
     // load the dist folder from Angular
     win.loadURL(
         url.format({
-            pathname: path.join(__dirname, `/index.html`),
+            pathname: path.join(__dirname, '/index.html'),
             protocol: 'file:',
             slashes: true
         })
     );
 
-    //win.webContents.openDevTools();
+    if (!app.isPackaged) {
+        win.webContents.openDevTools();
+    }
 }
 
 app.on('ready', () => {
