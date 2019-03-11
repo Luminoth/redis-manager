@@ -42,9 +42,18 @@ export class ServerTreeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(`there are ${this.electron.config.redisConfig.length} redis servers configured`);
+    console.log(`Adding ${this.electron.config.redisConfig.length} redis servers...`);
+    for (let redisConfig of this.electron.config.redisConfig) {
+      this.dataSource.data.push({
+        name: redisConfig.name,
+        host: redisConfig.host,
+        port: redisConfig.port
+      });
+    }
   }
 
   //#endregion
+
+  hasChild = (_: number, node: RedisServerNode) => node.expandable;
 
 }
