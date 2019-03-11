@@ -8,11 +8,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href ./ && tsc -p electron",
+    "build": "ng build && tsc -p electron",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build --base-href ./ && tsc -p electron && electron .",
+    "electron": "ng build && tsc -p electron && electron .",
     "package": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps"
@@ -39,6 +39,7 @@
     "angular-split": "^2.0.1",
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",
+    "ngx-electron": "^2.1.1",
     "redis": "^2.8.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",

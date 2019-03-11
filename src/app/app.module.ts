@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgxElectronModule } from 'ngx-electron';
 import { AngularSplitModule } from 'angular-split';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,7 @@ import { LogViewComponent } from './log-view/log-view.component';
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    NgxElectronModule,
     AngularSplitModule.forRoot(),
     AppRoutingModule,
     AppMaterialModule
