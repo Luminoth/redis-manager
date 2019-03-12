@@ -9,6 +9,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding: 30px;
 }
 
-.toolbar-spacer {
-  flex: 1 1 auto;
+.mat-toolbar {
+  .spacer {
+    flex: 1 1 auto;
+  }
 }

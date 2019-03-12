@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMessageEvent } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as url from 'url';
@@ -8,6 +8,8 @@ import { Config } from './config';
 const configFileName = 'config.json';
 
 let win: BrowserWindow | null = null;
+
+//#region Config
 
 function addFileWatcher(filename: fs.PathLike, listener?: ((event: string, filename: string) => void) | undefined) {
     console.log(`Watching file '${filename}'...`);
@@ -30,7 +32,7 @@ function loadConfig() {
 
     // watch it
     let reloadWait = false;
-    addFileWatcher(configPath, (event, filename) => {
+    addFileWatcher(configPath, (_, filename) => {
         if (reloadWait) {
             return;
         }
@@ -45,6 +47,8 @@ function loadConfig() {
         global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
     });
 }
+
+//#endregion
 
 function createWindow() {
     win = new BrowserWindow({
@@ -93,3 +97,11 @@ app.on('activate', () => {
         createWindow();
     }
 });
+
+//#region IPC
+
+ipcMain.on('redis-cmd', (_: IpcMessageEvent, cmd: string) => {
+    console.log(`TODO: exec redis command '${cmd}'`);
+});
+
+//#endregion

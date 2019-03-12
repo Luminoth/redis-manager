@@ -8,8 +8,12 @@ import { Config } from '../../electron/config';
 })
 export class AppElectronService {
 
+  //#region Lifecycle
+
   constructor(private electron: ElectronService) {
   }
+
+  //#endregion
 
   get config() {
     return this.electron.remote.getGlobal('config') as Config;
