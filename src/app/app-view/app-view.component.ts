@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material';
 
 import { environment } from '../../environments/environment';
+
+import { ConnectionDialogComponent } from '../connection-dialog/connection-dialog.component';
+import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
 
 @Component({
   selector: 'app-app-view',
@@ -12,7 +16,8 @@ export class AppViewComponent implements OnInit {
 
   //#region Lifecycle
 
-  constructor(private titleService: Title) {
+  constructor(private titleService: Title,
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -22,10 +27,16 @@ export class AppViewComponent implements OnInit {
   //#endregion
 
   onConnectRedis() {
-    console.log('TODO: open redis connection dialog');
+    this.dialog.open(ConnectionDialogComponent, {
+      width: '800px',
+      height: '600px',
+    });
   }
 
   onSettings() {
-    console.log('TODO: open settings dialog');
+    this.dialog.open(SettingsDialogComponent, {
+      width: '800px',
+      height: '600px',
+    });
   }
 }

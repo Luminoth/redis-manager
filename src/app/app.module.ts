@@ -16,6 +16,8 @@ import { KeyViewComponent } from './key-view/key-view.component';
 import { BottomViewComponent } from './bottom-view/bottom-view.component';
 import { LogViewComponent } from './log-view/log-view.component';
 import { ConsoleViewComponent } from './console-view/console-view.component';
+import { ConnectionDialogComponent } from './connection-dialog/connection-dialog.component';
+import { SettingsDialogComponent } from './settings-dialog/settings-dialog.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { ConsoleViewComponent } from './console-view/console-view.component';
     KeyViewComponent,
     BottomViewComponent,
     LogViewComponent,
-    ConsoleViewComponent
+    ConsoleViewComponent,
+    ConnectionDialogComponent,
+    SettingsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +40,10 @@ import { ConsoleViewComponent } from './console-view/console-view.component';
     AngularSplitModule.forRoot(),
     AppRoutingModule,
     AppMaterialModule
+  ],
+  entryComponents: [
+    ConnectionDialogComponent,
+    SettingsDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
