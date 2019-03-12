@@ -15,6 +15,7 @@ import { TopViewComponent } from './top-view/top-view.component';
 import { KeyViewComponent } from './key-view/key-view.component';
 import { BottomViewComponent } from './bottom-view/bottom-view.component';
 import { LogViewComponent } from './log-view/log-view.component';
+import { ConsoleViewComponent } from './console-view/console-view.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { LogViewComponent } from './log-view/log-view.component';
     TopViewComponent,
     KeyViewComponent,
     BottomViewComponent,
-    LogViewComponent
+    LogViewComponent,
+    ConsoleViewComponent
   ],
   imports: [
     BrowserModule,
