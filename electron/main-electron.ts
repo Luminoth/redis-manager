@@ -2,12 +2,16 @@ import { app, BrowserWindow, ipcMain, IpcMessageEvent } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as url from 'url';
+import * as redis from 'redis';
 
 import { Config } from './config';
+import * as commands from './commands';
+import * as notifications from './notifications';
 
 const configFileName = 'config.json';
 
 let win: BrowserWindow | null = null;
+let redisConnections: Map<string, redis.RedisClient> = new Map<string, redis.RedisClient>();
 
 //#region Config
 
@@ -98,10 +102,93 @@ app.on('activate', () => {
     }
 });
 
+/*
+TODO: this architecture sucks right now
+we want to have this module hold the redis connections so they get garbage collected,
+but we probably want to hand them off directly to the UI for commands.
+passing the commands through IPC is never really going to work out cleanly
+*/
+
 //#region IPC
 
-ipcMain.on('redis-cmd', (_: IpcMessageEvent, cmd: string) => {
-    console.log(`TODO: exec redis command '${cmd}'`);
+ipcMain.on(commands.RedisConfigUpdate, (_: IpcMessageEvent, connection: string) => {
+    disconnectRedis(connection, true);
 });
+
+ipcMain.on(commands.RedisConfigRemove, (_: IpcMessageEvent, connection: string) => {
+    disconnectRedis(connection, true);
+});
+
+ipcMain.on(commands.RedisConnect, (_: IpcMessageEvent, connection: string) => {
+    connectRedis(connection);
+});
+
+ipcMain.on(commands.RedisDisconnect, (_: IpcMessageEvent, connection: string) => {
+    disconnectRedis(connection, false);
+});
+
+ipcMain.on(commands.RedisCommand, (_: IpcMessageEvent, connection: string, cmd: string) => {
+    if (!redisConnections.has(connection)) {
+        if (!connectRedis(connection)) {
+            return;
+        }
+    }
+
+    const client = redisConnections.get(connection);
+    if (!client) {
+        console.warn(`Redis connection '${connection}' not connected!`);
+        return;
+    }
+
+    client.send_command(cmd, [], (err: redis.RedisError | null, reply: any) => {
+        win!.webContents.send(notifications.RedisResponse, connection, reply);
+    });
+});
+
+//#endregion
+
+//#region Redis
+
+function connectRedis(connection: string) {
+    disconnectRedis(connection, true);
+
+    const config = global.config.redisConfig.find(config => {
+        return config.name == connection;
+    });
+
+    if (!config) {
+        console.warn(`No such redis connection ${connection}!`);
+
+        win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed);
+        return false;
+    }
+
+    win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.Connecting);
+
+    const client = redis.createClient(config.port, config.host);
+    // TODO: error handling
+
+    // TODO: auth (send ConnectAuth status)
+
+    redisConnections.set(config.name, client);
+
+    win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectSuccess);
+
+    return true;
+}
+
+function disconnectRedis(connection: string, notify: boolean) {
+    const client = redisConnections.get(connection);
+    if (!client) {
+        return;
+    }
+
+    client.quit();
+    redisConnections.delete(connection);
+
+    if (notify) {
+        win!.webContents.send(notifications.RedisDisconnect, connection);
+    }
+}
 
 //#endregion

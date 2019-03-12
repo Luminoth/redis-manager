@@ -3,7 +3,7 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 
 import { AppElectronService } from '../app-electron.service';
-import { RedisServer } from '../redis-server';
+import { RedisServerConfig } from '../../../electron/config';
 
 interface RedisServerNode {
   expandable: boolean;
@@ -18,7 +18,7 @@ interface RedisServerNode {
 })
 export class ServerTreeComponent implements OnInit {
 
-  private transformer = (node: RedisServer, level: number) => {
+  private transformer = (node: RedisServerConfig, level: number) => {
     return {
       expandable: true,
       name: node.name,
@@ -42,14 +42,7 @@ export class ServerTreeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(`Adding ${this.electron.config.redisConfig.length} redis servers...`);
-    for (let redisConfig of this.electron.config.redisConfig) {
-      this.dataSource.data.push({
-        name: redisConfig.name,
-        host: redisConfig.host,
-        port: redisConfig.port
-      });
-    }
+    this.dataSource.data = this.electron.config.redisConfig;
   }
 
   //#endregion

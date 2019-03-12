@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
+
+class LogMessage {
+  timestamp: moment.Moment = moment();
+  message: string = '';
+  toString = () => {
+    return `${this.timestamp} ${this.message}`;
+  }
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogService {
 
-  private logMessages: string[] = [];
+  private logMessages: LogMessage[] = [];
 
   //#region Lifecycle
 
@@ -19,7 +28,14 @@ export class LogService {
   }
 
   appendLog(message: string) {
-    this.logMessages.push(message);
+    const logMessage: LogMessage = {
+      timestamp: moment(),
+      message: message
+    };
+
+    console.log(`${logMessage}`);
+
+    this.logMessages.push(logMessage);
   }
 
 }
