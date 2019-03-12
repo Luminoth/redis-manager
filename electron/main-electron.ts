@@ -8,7 +8,8 @@ import { Config } from './config';
 import * as commands from './commands';
 import * as notifications from './notifications';
 
-const configFileName = 'config.json';
+const configPath = path.join(app.getPath('userData'), 'config.json');
+let reloadWait = false;
 
 let win: BrowserWindow | null = null;
 let redisConnections: Map<string, redis.RedisClient> = new Map<string, redis.RedisClient>();
@@ -21,8 +22,6 @@ function addFileWatcher(filename: fs.PathLike, listener?: ((event: string, filen
 }
 
 function loadConfig() {
-    const configPath = path.join(app.getPath('userData'), configFileName);
-
     // ensure the config file exists
     if (!fs.existsSync(configPath)) {
         fs.writeFileSync(configPath, '{}');
@@ -33,10 +32,10 @@ function loadConfig() {
     // load it
     const rawConfig = fs.readFileSync(configPath);
     global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
+    console.log(global.config);
 
     // watch it
-    let reloadWait = false;
-    addFileWatcher(configPath, (_, filename) => {
+    addFileWatcher(configPath, () => {
         if (reloadWait) {
             return;
         }
@@ -46,9 +45,10 @@ function loadConfig() {
             reloadWait = false;
         }, 100);
 
-        console.log(`Reloading config '${filename}'...`);
+        console.log(`Reloading config '${configPath}'...`);
         const rawConfig = fs.readFileSync(configPath);
         global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
+        console.log(global.config);
     });
 }
 
@@ -111,12 +111,20 @@ passing the commands through IPC is never really going to work out cleanly
 
 //#region IPC
 
-ipcMain.on(commands.RedisConfigUpdate, (_: IpcMessageEvent, connection: string) => {
+ipcMain.on(notifications.RedisConfigUpdate, (_: IpcMessageEvent, connection: string) => {
     disconnectRedis(connection, true);
+
+    // TODO: use reloadWait to avoid reloading this after we save?
+    console.log(`Saving config '${configPath}'...`);
+    fs.writeFileSync(configPath, JSON.stringify(global.config));
 });
 
-ipcMain.on(commands.RedisConfigRemove, (_: IpcMessageEvent, connection: string) => {
+ipcMain.on(notifications.RedisConfigRemove, (_: IpcMessageEvent, connection: string) => {
     disconnectRedis(connection, true);
+
+    // TODO: use reloadWait to avoid reloading this after we save?
+    console.log(`Reloading config '${configPath}'...`);
+    fs.writeFileSync(configPath, JSON.stringify(global.config));
 });
 
 ipcMain.on(commands.RedisConnect, (_: IpcMessageEvent, connection: string) => {

@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxElectronModule } from 'ngx-electron';
 import { AngularSplitModule } from 'angular-split';
@@ -35,6 +36,7 @@ import { SettingsDialogComponent } from './settings-dialog/settings-dialog.compo
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     FlexLayoutModule,
     NgxElectronModule,
     AngularSplitModule.forRoot(),

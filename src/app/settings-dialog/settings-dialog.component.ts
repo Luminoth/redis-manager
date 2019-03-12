@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 @Component({
@@ -8,9 +9,14 @@ import { MatDialogRef } from '@angular/material';
 })
 export class SettingsDialogComponent implements OnInit {
 
+  private settingsForm!: FormGroup;
+
   //#region Lifecycle
 
-  constructor(public dialogRef: MatDialogRef<SettingsDialogComponent>) {
+  constructor(public dialogRef: MatDialogRef<SettingsDialogComponent>,
+    private fb: FormBuilder) {
+    this.settingsForm = this.fb.group({
+    });
   }
 
   ngOnInit() {

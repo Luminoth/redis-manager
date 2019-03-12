@@ -1,10 +1,25 @@
-<div fxLayout="column" fxFlexFill>
+<div fxLayout="column" fxFlexFill [formGroup]="connectionForm">
   <h1 mat-dialog-title>New Connection Settings</h1>
   <div mat-dialog-content fxFlex>
+    <div formGroupName="main_settings" fxLayout="column">
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name" required>
+      </mat-form-field>
+      <div fxLayout="row">
+        <mat-form-field fxFlex>
+          <input matInput placeholder="Address" formControlName="address" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="number" matInput placeholder="Port" formControlName="port" required>
+        </mat-form-field>
+      </div>
+    </div>
   </div>
   <div fxLayout="row" mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="onTestConnection()" [disabled]="!connectionForm.valid">Test
+      Connection</button>
     <span fxFlex></span>
-    <button mat-raised-button color="primary" (click)="onOk()" cdkFocusInitial>Ok</button>
+    <button mat-raised-button color="primary" (click)="onOk()" [disabled]="!connectionForm.valid">Ok</button>
     <button mat-raised-button mat-dialog-close>Cancel</button>
   </div>
 </div>
