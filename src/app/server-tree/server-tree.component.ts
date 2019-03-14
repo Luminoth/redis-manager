@@ -3,6 +3,7 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 
 import { AppElectronService } from '../app-electron.service';
+import { RedisService } from '../redis.service';
 import { RedisServerConfig } from '../../../electron/config';
 
 interface RedisServerNode {
@@ -38,7 +39,8 @@ export class ServerTreeComponent implements OnInit {
 
   //#region Lifecycle
 
-  constructor(private electron: AppElectronService) {
+  constructor(private electron: AppElectronService,
+    private redis: RedisService) {
   }
 
   ngOnInit() {
@@ -50,16 +52,17 @@ export class ServerTreeComponent implements OnInit {
   hasChild = (_: number, node: RedisServerNode) => node.expandable;
 
   onConnect(connection: string) {
-    console.log(`TODO: connect ${connection}`);
+    this.redis.connect(connection);
   }
 
   onDisconnect(connection: string) {
-    console.log(`TODO: disconnect ${connection}`);
+    this.redis.disconnect(connection);
   }
 
   onRemoveConnection(connection: string) {
     // TODO: pop up a dialog confirming!
     console.log(`TODO: remove connection ${connection}`);
+    //this.electron.removeRedisConfig(connection);
   }
 
 }
