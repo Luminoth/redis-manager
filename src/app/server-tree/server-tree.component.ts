@@ -20,7 +20,7 @@ export class ServerTreeComponent implements OnInit {
 
   private transformer = (node: RedisServerConfig, level: number) => {
     return {
-      expandable: true,
+      expandable: this.electron.redisConnections.has(node.name),
       name: node.name,
       level: level,
     };
@@ -48,5 +48,18 @@ export class ServerTreeComponent implements OnInit {
   //#endregion
 
   hasChild = (_: number, node: RedisServerNode) => node.expandable;
+
+  onConnect(connection: string) {
+    console.log(`TODO: connect ${connection}`);
+  }
+
+  onDisconnect(connection: string) {
+    console.log(`TODO: disconnect ${connection}`);
+  }
+
+  onRemoveConnection(connection: string) {
+    // TODO: pop up a dialog confirming!
+    console.log(`TODO: remove connection ${connection}`);
+  }
 
 }

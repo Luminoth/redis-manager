@@ -42,4 +42,5 @@ export class RedisService {
     this.log.appendLog(`${connection}> [Cmd] ${cmd}`);
     this.electron.ipcRenderer.send(commands.RedisCommand, connection, cmd);
   }
+
 }

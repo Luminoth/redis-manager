@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as url from 'url';
 import * as redis from 'redis';
 
-import { Config } from './config';
+import { Config, RedisServerConfig } from './config';
 import * as commands from './commands';
 import * as notifications from './notifications';
 
@@ -12,7 +12,6 @@ const configPath = path.join(app.getPath('userData'), 'config.json');
 let reloadWait = false;
 
 let win: BrowserWindow | null = null;
-let redisConnections: Map<string, redis.RedisClient> = new Map<string, redis.RedisClient>();
 
 //#region Config
 
@@ -32,7 +31,6 @@ function loadConfig() {
     // load it
     const rawConfig = fs.readFileSync(configPath);
     global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
-    console.log(global.config);
 
     // watch it
     addFileWatcher(configPath, () => {
@@ -48,7 +46,6 @@ function loadConfig() {
         console.log(`Reloading config '${configPath}'...`);
         const rawConfig = fs.readFileSync(configPath);
         global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
-        console.log(global.config);
     });
 }
 
@@ -82,6 +79,8 @@ function createWindow() {
 }
 
 app.on('ready', () => {
+    global.redisConnections = new Map<string, redis.RedisClient>();
+
     loadConfig();
     createWindow();
 });
@@ -111,16 +110,25 @@ passing the commands through IPC is never really going to work out cleanly
 
 //#region IPC
 
-ipcMain.on(notifications.RedisConfigUpdate, (_: IpcMessageEvent, connection: string) => {
-    disconnectRedis(connection, true);
+ipcMain.on(commands.RedisConfigAdd, (_: IpcMessageEvent, config: RedisServerConfig) => {
+    disconnectRedis(config.name, true);
+
+    global.config.redisConfig.push(config);
 
     // TODO: use reloadWait to avoid reloading this after we save?
     console.log(`Saving config '${configPath}'...`);
     fs.writeFileSync(configPath, JSON.stringify(global.config));
 });
 
-ipcMain.on(notifications.RedisConfigRemove, (_: IpcMessageEvent, connection: string) => {
+ipcMain.on(commands.RedisConfigRemove, (_: IpcMessageEvent, connection: string) => {
     disconnectRedis(connection, true);
+
+    for (let i = 0; i < global.config.redisConfig.length; i++) {
+        if (global.config.redisConfig[i].name === connection) {
+            global.config.redisConfig.splice(i, 1);
+            break;
+        }
+    }
 
     // TODO: use reloadWait to avoid reloading this after we save?
     console.log(`Reloading config '${configPath}'...`);
@@ -136,19 +144,19 @@ ipcMain.on(commands.RedisDisconnect, (_: IpcMessageEvent, connection: string) =>
 });
 
 ipcMain.on(commands.RedisCommand, (_: IpcMessageEvent, connection: string, cmd: string) => {
-    if (!redisConnections.has(connection)) {
+    if (!global.redisConnections.has(connection)) {
         if (!connectRedis(connection)) {
             return;
         }
     }
 
-    const client = redisConnections.get(connection);
+    const client = global.redisConnections.get(connection);
     if (!client) {
         console.warn(`Redis connection '${connection}' not connected!`);
         return;
     }
 
-    client.send_command(cmd, [], (err: redis.RedisError | null, reply: any) => {
+    client.send_command(cmd, [], (_: redis.RedisError | null, reply: any) => {
         win!.webContents.send(notifications.RedisResponse, connection, reply);
     });
 });
@@ -178,7 +186,7 @@ function connectRedis(connection: string) {
 
     // TODO: auth (send ConnectAuth status)
 
-    redisConnections.set(config.name, client);
+    global.redisConnections.set(config.name, client);
 
     win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectSuccess);
 
@@ -186,13 +194,13 @@ function connectRedis(connection: string) {
 }
 
 function disconnectRedis(connection: string, notify: boolean) {
-    const client = redisConnections.get(connection);
+    const client = global.redisConnections.get(connection);
     if (!client) {
         return;
     }
 
     client.quit();
-    redisConnections.delete(connection);
+    global.redisConnections.delete(connection);
 
     if (notify) {
         win!.webContents.send(notifications.RedisDisconnect, connection);
