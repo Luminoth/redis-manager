@@ -165,6 +165,8 @@ ipcMain.on(commands.RedisCommand, (_: IpcMessageEvent, connection: string, cmd: 
 
 //#region Redis
 
+// https://www.npmjs.com/package/redis
+
 function connectRedis(connection: string) {
     disconnectRedis(connection, true);
 
@@ -179,16 +181,48 @@ function connectRedis(connection: string) {
         return false;
     }
 
+    console.log(`Connecting redis connection ${config.name} (${config.host}:${config.port})...`);
     win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.Connecting);
 
-    const client = redis.createClient(config.port, config.host);
-    // TODO: error handling
+    const client = redis.createClient(config.port, config.host, {
+        //password: config.password,
 
-    // TODO: auth (send ConnectAuth status)
+        // TODO: setting this seems to not emit the error event ?
+        /*retry_strategy: (options) => {
+            if (options.error && options.error.code === 'ECONNREFUSED') {
+                console.error('The server refused the connection');
+                win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed);
+                return new Error('The server refused the connection');
+            }
 
-    global.redisConnections.set(config.name, client);
+            // give up :shrug:
+            if (options.attempt > 10) {
+                console.error('Max retries attempted');
+                win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed);
+                return new Error('Max retries attempted');
+            }
 
-    win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectSuccess);
+            const retryms = Math.min(options.attempt * 100, 3000);
+            console.warn(`Connection attempt ${options.attempt} failed, retrying in ${retryms}...`);
+            return retryms;
+        }*/
+    });
+
+    // TODO: we should also store pending connections so that we don't have multiples in-flight
+
+    client.on('warning', (warn) => {
+        console.warn(`Redis Warning (${connection}): ${warn}`);
+    });
+
+    client.on('error', (err) => {
+        console.error(`Redis Error (${connection}): ${err}`);
+    });
+
+    client.on('ready', () => {
+        global.redisConnections.set(config.name, client);
+
+        win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectSuccess);
+    });
 
     return true;
 }

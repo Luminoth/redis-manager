@@ -4,7 +4,7 @@ import * as moment from 'moment';
 class LogMessage {
   timestamp: moment.Moment = moment();
   message: string = '';
-  toString = () => {
+  public toString() {
     return `${this.timestamp} ${this.message}`;
   }
 }
@@ -34,7 +34,6 @@ export class LogService {
     };
 
     console.log(`${logMessage}`);
-
     this.logMessages.push(logMessage);
   }
 
