@@ -7,7 +7,9 @@
             <button mat-icon-button (click)="onConnect(node.name)">
                 <mat-icon>add</mat-icon>
             </button>
-            <button mat-icon-button disabled></button>
+            <button mat-icon-button (click)="onRemoveConnection(node.name)">
+                <mat-icon>remove</mat-icon>
+            </button>
         </mat-tree-node>
         <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding fxLayout="row">
             <button mat-icon-button matTreeNodeToggle>

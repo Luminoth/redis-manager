@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { Subscription } from 'rxjs';
 
 import { AppElectronService } from '../app-electron.service';
 import { RedisService } from '../redis.service';
@@ -17,9 +18,13 @@ interface RedisServerNode {
   templateUrl: './server-tree.component.html',
   styleUrls: ['./server-tree.component.scss']
 })
-export class ServerTreeComponent implements OnInit {
+export class ServerTreeComponent implements OnInit, OnDestroy {
 
-  private transformer = (node: RedisServerConfig, level: number) => {
+  // TODO: look at the angular material dynamic data example
+  // this should probably do something more like that
+  // since it seems like it has a much cleaner way of connecting the data
+
+  private transformer = (node: RedisServerConfig, level: number): RedisServerNode => {
     return {
       expandable: this.electron.redisConnections.has(node.name),
       name: node.name,
@@ -27,7 +32,9 @@ export class ServerTreeComponent implements OnInit {
     };
   }
 
-  treeControl: FlatTreeControl<RedisServerNode> = new FlatTreeControl<RedisServerNode>(
+  private reloadSubscription: Subscription;
+
+  treeControl = new FlatTreeControl<RedisServerNode>(
     node => node.level,
     node => node.expandable
   );
@@ -41,10 +48,17 @@ export class ServerTreeComponent implements OnInit {
 
   constructor(private electron: AppElectronService,
     private redis: RedisService) {
+    this.reloadSubscription = this.electron.reloadConfig$.subscribe(() => {
+      this.dataSource.data = this.electron.config.redisConfig;
+    });
   }
 
   ngOnInit() {
     this.dataSource.data = this.electron.config.redisConfig;
+  }
+
+  ngOnDestroy() {
+    this.reloadSubscription.unsubscribe();
   }
 
   //#endregion
@@ -61,8 +75,7 @@ export class ServerTreeComponent implements OnInit {
 
   onRemoveConnection(connection: string) {
     // TODO: pop up a dialog confirming!
-    console.log(`TODO: remove connection ${connection}`);
-    //this.electron.removeRedisConfig(connection);
+    this.electron.removeRedisConfig(connection);
   }
 
 }

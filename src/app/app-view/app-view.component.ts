@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
+import { AppElectronService } from '../app-electron.service';
 import { ConnectionDialogComponent } from '../connection-dialog/connection-dialog.component';
 import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
 
@@ -14,14 +16,35 @@ import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.comp
 })
 export class AppViewComponent implements OnInit {
 
+  private connectionAddedSubscription: Subscription;
+  private connectionRemovedSubscription: Subscription;
+
   //#region Lifecycle
 
   constructor(private titleService: Title,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private electron: AppElectronService) {
+    this.connectionAddedSubscription = this.electron.redisConnectionAdded$.subscribe((connection: string) => {
+      this.snackBar.open(`Redis connection '${connection}' added`, undefined, {
+        duration: 3000
+      });
+    });
+
+    this.connectionRemovedSubscription = this.electron.redisConnectionRemoved$.subscribe((connection: string) => {
+      this.snackBar.open(`Redis connection '${connection}' removed`, undefined, {
+        duration: 3000
+      });
+    });
   }
 
   ngOnInit() {
     this.titleService.setTitle(`${environment.title}`);
+  }
+
+  ngOnDestroy() {
+    this.connectionAddedSubscription.unsubscribe();
+    this.connectionRemovedSubscription.unsubscribe();
   }
 
   //#endregion

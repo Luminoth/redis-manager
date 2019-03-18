@@ -1,18 +1,44 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { IpcMessageEvent } from 'electron';
 import { ElectronService } from 'ngx-electron';
 import * as redis from 'redis';
 
 import { Config, RedisServerConfig } from '../../electron/config';
 import * as commands from '../../electron/commands';
+import * as notifications from '../../electron/notifications';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppElectronService {
 
+  private reloadConfigSource = new Subject();
+  private redisConnectionAddedSource = new Subject<string>();
+  private redisConnectionRemovedSource = new Subject<string>();
+
+  //#region Streams
+
+  reloadConfig$ = this.reloadConfigSource.asObservable();
+  redisConnectionAdded$ = this.redisConnectionAddedSource.asObservable();
+  redisConnectionRemoved$ = this.redisConnectionRemovedSource.asObservable();
+
+  //#endregion
+
   //#region Lifecycle
 
   constructor(private electron: ElectronService) {
+    this.electron.ipcRenderer.on(notifications.ConfigReload, () => {
+      this.reloadConfigSource.next();
+    });
+
+    this.electron.ipcRenderer.on(notifications.RedisConnectionAdded, (_: IpcMessageEvent, connection: string) => {
+      this.redisConnectionAddedSource.next(connection);
+    });
+
+    this.electron.ipcRenderer.on(notifications.RedisConnectionRemoved, (_: IpcMessageEvent, connection: string) => {
+      this.redisConnectionRemovedSource.next(connection);
+    });
   }
 
   //#endregion

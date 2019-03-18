@@ -43,9 +43,13 @@ function loadConfig() {
             reloadWait = false;
         }, 100);
 
+        disconnectRedisAll(true);
+
         console.log(`Reloading config '${configPath}'...`);
         const rawConfig = fs.readFileSync(configPath);
         global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
+
+        win!.webContents.send(notifications.ConfigReload);
     });
 }
 
@@ -118,6 +122,8 @@ ipcMain.on(commands.RedisConfigAdd, (_: IpcMessageEvent, config: RedisServerConf
     // TODO: use reloadWait to avoid reloading this after we save?
     console.log(`Saving config '${configPath}'...`);
     fs.writeFileSync(configPath, JSON.stringify(global.config));
+
+    win!.webContents.send(notifications.RedisConnectionAdded, config.name);
 });
 
 ipcMain.on(commands.RedisConfigRemove, (_: IpcMessageEvent, connection: string) => {
@@ -133,6 +139,8 @@ ipcMain.on(commands.RedisConfigRemove, (_: IpcMessageEvent, connection: string) 
     // TODO: use reloadWait to avoid reloading this after we save?
     console.log(`Reloading config '${configPath}'...`);
     fs.writeFileSync(configPath, JSON.stringify(global.config));
+
+    win!.webContents.send(notifications.RedisConnectionRemoved, connection);
 });
 
 ipcMain.on(commands.RedisConnect, (_: IpcMessageEvent, connection: string) => {
@@ -188,24 +196,22 @@ function connectRedis(connection: string) {
         //password: config.password,
 
         // TODO: setting this seems to not emit the error event ?
-        /*retry_strategy: (options) => {
+        retry_strategy: (options) => {
             if (options.error && options.error.code === 'ECONNREFUSED') {
-                console.error('The server refused the connection');
-                win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed);
-                return new Error('The server refused the connection');
+                win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed, 'Connection refused');
+                return options.error;
             }
 
             // give up :shrug:
             if (options.attempt > 10) {
-                console.error('Max retries attempted');
-                win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed);
+                win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed, 'Max retries attempted');
                 return new Error('Max retries attempted');
             }
 
             const retryms = Math.min(options.attempt * 100, 3000);
             console.warn(`Connection attempt ${options.attempt} failed, retrying in ${retryms}...`);
             return retryms;
-        }*/
+        }
     });
 
     // TODO: we should also store pending connections so that we don't have multiples in-flight
@@ -238,6 +244,13 @@ function disconnectRedis(connection: string, notify: boolean) {
 
     if (notify) {
         win!.webContents.send(notifications.RedisDisconnect, connection);
+    }
+}
+
+function disconnectRedisAll(notify: boolean) {
+    const connections = Array.from(global.redisConnections.keys());
+    for (let connection in connections) {
+        disconnectRedis(connection, notify);
     }
 }
 
