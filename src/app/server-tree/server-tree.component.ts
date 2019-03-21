@@ -31,8 +31,6 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
     node => node.expandable
   );
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
   private transformer = (node: RedisServerConfig, level: number): RedisServerNode => {
     return {
       expandable: this.electron.redisConnections.has(node.name),
@@ -43,6 +41,8 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
 
   treeFlattener = new MatTreeFlattener(
     this.transformer, node => node.level, node => node.expandable, node => null);
+
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   //#region Lifecycle
 
