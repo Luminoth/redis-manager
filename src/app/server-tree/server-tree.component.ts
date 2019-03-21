@@ -24,6 +24,15 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
   // this should probably do something more like that
   // since it seems like it has a much cleaner way of connecting the data
 
+  private reloadSubscription: Subscription;
+
+  treeControl = new FlatTreeControl<RedisServerNode>(
+    node => node.level,
+    node => node.expandable
+  );
+
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+
   private transformer = (node: RedisServerConfig, level: number): RedisServerNode => {
     return {
       expandable: this.electron.redisConnections.has(node.name),
@@ -32,17 +41,8 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
     };
   }
 
-  private reloadSubscription: Subscription;
-
-  treeControl = new FlatTreeControl<RedisServerNode>(
-    node => node.level,
-    node => node.expandable
-  );
-
   treeFlattener = new MatTreeFlattener(
     this.transformer, node => node.level, node => node.expandable, node => null);
-
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   //#region Lifecycle
 

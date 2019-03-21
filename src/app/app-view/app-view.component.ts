@@ -14,7 +14,7 @@ import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.comp
   templateUrl: './app-view.component.html',
   styleUrls: ['./app-view.component.scss']
 })
-export class AppViewComponent implements OnInit {
+export class AppViewComponent implements OnInit, OnDestroy {
 
   private connectionAddedSubscription: Subscription;
   private connectionRemovedSubscription: Subscription;

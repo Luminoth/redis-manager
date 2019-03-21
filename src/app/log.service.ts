@@ -3,7 +3,7 @@ import * as moment from 'moment';
 
 class LogMessage {
   timestamp: moment.Moment = moment();
-  message: string = '';
+  message = '';
 
   public toString() {
     return `${this.timestamp.format()} ${this.message}`;

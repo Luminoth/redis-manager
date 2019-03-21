@@ -20,6 +20,25 @@ function addFileWatcher(filename: fs.PathLike, listener?: ((event: string, filen
     fs.watch(filename, listener);
 }
 
+function reloadConfig() {
+    if (reloadWait) {
+        return;
+    }
+
+    reloadWait = true;
+    setTimeout(() => {
+        reloadWait = false;
+    }, 100);
+
+    disconnectRedisAll(true);
+
+    console.log(`Reloading config '${configPath}'...`);
+    const rawConfig = fs.readFileSync(configPath);
+    global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
+
+    win!.webContents.send(notifications.ConfigReload);
+}
+
 function loadConfig() {
     // ensure the config file exists
     if (!fs.existsSync(configPath)) {
@@ -33,24 +52,7 @@ function loadConfig() {
     global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
 
     // watch it
-    addFileWatcher(configPath, () => {
-        if (reloadWait) {
-            return;
-        }
-
-        reloadWait = true;
-        setTimeout(() => {
-            reloadWait = false;
-        }, 100);
-
-        disconnectRedisAll(true);
-
-        console.log(`Reloading config '${configPath}'...`);
-        const rawConfig = fs.readFileSync(configPath);
-        global.config = Object.assign(new Config(), JSON.parse(rawConfig.toString()));
-
-        win!.webContents.send(notifications.ConfigReload);
-    });
+    addFileWatcher(configPath, reloadConfig);
 }
 
 //#endregion
@@ -178,8 +180,8 @@ ipcMain.on(commands.RedisCommand, (_: IpcMessageEvent, connection: string, cmd: 
 function connectRedis(connection: string) {
     disconnectRedis(connection, true);
 
-    const config = global.config.redisConfig.find(config => {
-        return config.name == connection;
+    const config = global.config.redisConfig.find(redisConfig => {
+        return redisConfig.name === connection;
     });
 
     if (!config) {
@@ -189,7 +191,14 @@ function connectRedis(connection: string) {
         return false;
     }
 
+    connectRedisConfig(connection, config);
+
+    return true;
+}
+
+function connectRedisConfig(connection: string, config: RedisServerConfig) {
     console.log(`Connecting redis connection ${config.name} (${config.host}:${config.port})...`);
+
     win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.Connecting);
 
     const client = redis.createClient(config.port, config.host, {
@@ -229,8 +238,6 @@ function connectRedis(connection: string) {
 
         win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectSuccess);
     });
-
-    return true;
 }
 
 function disconnectRedis(connection: string, notify: boolean) {
@@ -249,7 +256,7 @@ function disconnectRedis(connection: string, notify: boolean) {
 
 function disconnectRedisAll(notify: boolean) {
     const connections = Array.from(global.redisConnections.keys());
-    for (let connection in connections) {
+    for (const connection of Object.keys(connections)) {
         disconnectRedis(connection, notify);
     }
 }

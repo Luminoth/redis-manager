@@ -8,7 +8,7 @@
 
 $rm-primary: mat-palette($mat-indigo);
 $rm-accent:  mat-palette($mat-pink, A200, A100, A400);
-$rm-warn: mat-palette($mat-red);
+$rm-warn:    mat-palette($mat-red);
 
 // create the theme
 $rm-theme: mat-dark-theme($rm-primary, $rm-accent, $rm-warn);
