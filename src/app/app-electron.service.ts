@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { NgZone, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { IpcMessageEvent } from 'electron';
 import { ElectronService } from 'ngx-electron';
@@ -27,17 +27,26 @@ export class AppElectronService {
 
   //#region Lifecycle
 
-  constructor(private electron: ElectronService) {
+  constructor(private electron: ElectronService,
+    private zone: NgZone) {
+    // electron callbacks need to run through NgZone so they run in the Angular zone
+
     this.electron.ipcRenderer.on(notifications.ConfigReload, () => {
-      this.reloadConfigSource.next();
+      this.zone.run(() => {
+        this.reloadConfigSource.next();
+      });
     });
 
     this.electron.ipcRenderer.on(notifications.RedisConnectionAdded, (_: IpcMessageEvent, connection: string) => {
-      this.redisConnectionAddedSource.next(connection);
+      this.zone.run(() => {
+        this.redisConnectionAddedSource.next(connection);
+      });
     });
 
     this.electron.ipcRenderer.on(notifications.RedisConnectionRemoved, (_: IpcMessageEvent, connection: string) => {
-      this.redisConnectionRemovedSource.next(connection);
+      this.zone.run(() => {
+        this.redisConnectionRemovedSource.next(connection);
+      });
     });
   }
 

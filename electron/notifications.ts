@@ -8,8 +8,8 @@ export const RedisDisconnect = 'redis-disconnect';
 export const RedisResponse = 'redis-response';
 
 export enum RedisConnectStatus {
-    Connecting,
-    ConnectAuthenticate,
-    ConnectSuccess,
-    ConnectFailed
+    Connecting = 'Connecting',
+    ConnectAuthenticate = 'Authenticate',
+    ConnectSuccess = 'Success',
+    ConnectFailed = 'Failed'
 }
