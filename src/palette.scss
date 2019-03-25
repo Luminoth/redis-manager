@@ -1,0 +1,8 @@
+@import '~@angular/material/theming';
+
+// define palettes ($palette-name, main color, light variant, dark variant)
+// https://material.io/design/color/#color-usage-palettes
+
+$rm-primary: mat-palette($mat-indigo);
+$rm-accent:  mat-palette($mat-pink, A200, A100, A400);
+$rm-warn:    mat-palette($mat-red);

@@ -1,16 +1,10 @@
 @import '~@angular/material/theming';
+@import 'palette.scss';
 
 // include non-theme styles for core
 @include mat-core();
 
-// define palettes ($palette-name, main color, light variant, dark variant)
-// https://material.io/design/color/#color-usage-palettes
-
-$rm-primary: mat-palette($mat-indigo);
-$rm-accent:  mat-palette($mat-pink, A200, A100, A400);
-$rm-warn:    mat-palette($mat-red);
-
-// create the theme
+// define the theme
 $rm-theme: mat-dark-theme($rm-primary, $rm-accent, $rm-warn);
 
 // include all theme styles for the components
