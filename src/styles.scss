@@ -12,13 +12,20 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.button-row a {
-  margin-right: 8px;
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
 }
 
 .spinner-button {
-    .mat-spinner {
-        margin-top: 6px;
-        margin-bottom: 6px;
+    .mat-progress-spinner {
+        margin: 8px;
+    }
+}
+
+.button-row {
+    button, a {
+        margin-top: 8px;
+        margin-right: 8px;
     }
 }
