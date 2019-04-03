@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { AppElectronService } from '../app-electron.service';
+import { RedisService } from '../redis.service';
 import { nameInUseValidator } from '../redis-server-config.directive';
+import * as notifications from '../../../electron/notifications';
+
+enum State {
+  Idle,
+  TestConnection,
+}
 
 @Component({
   selector: 'app-connection-dialog',
@@ -11,53 +18,59 @@ import { nameInUseValidator } from '../redis-server-config.directive';
   styleUrls: ['./connection-dialog.component.scss']
 })
 export class ConnectionDialogComponent implements OnInit {
+  connectionForm!: FormGroup;
+  securityForm!: FormGroup;
 
-  private connectionForm!: FormGroup;
+  State = State;
+  state = State.Idle;
 
   //#region Lifecycle
 
   constructor(public dialogRef: MatDialogRef<ConnectionDialogComponent>,
+    private snackBar: MatSnackBar,
     private electron: AppElectronService,
+    private redis: RedisService,
     private fb: FormBuilder) {
   }
 
   ngOnInit() {
     this.connectionForm = this.fb.group({
-      main_settings: this.fb.group({
-        name: ['', [
-          Validators.required,
-          nameInUseValidator(this.electron.config)
-        ]
-        ],
-        address: ['127.0.0.1', [
-          Validators.required,
-          // TODO: add an IP address / hostname validator
-        ]
-        ],
-        port: [6379, [
-          Validators.required,
-          Validators.min(0), Validators.max(65535)
-        ]
-        ],
-        // TODO: auth
-      }),
-      // TODO: security
+      name: ['', [
+        Validators.required,
+        nameInUseValidator(this.electron.config)
+      ]],
+      address: ['127.0.0.1', [
+        Validators.required,
+        // TODO: add an IP address / hostname validator
+      ]],
+      port: [6379, [
+        Validators.required,
+        Validators.min(0), Validators.max(65535)
+      ]],
+      // TODO: auth
+    });
+
+    this.securityForm = this.fb.group({
     });
   }
 
   //#endregion
 
+  //#region Connection Form
+
   get name() {
-    return this.connectionForm.get('main_settings.name')!.value as string;
+    return this.connectionForm.get('name')!.value as string;
   }
 
   get address() {
-    return this.connectionForm.get('main_settings.address')!.value as string;
+    return this.connectionForm.get('address')!.value as string;
   }
 
   get port() {
-    return +(this.connectionForm.get('main_settings.port')!.value as string);
+    return +(this.connectionForm.get('port')!.value as string);
   }
+
+  //#endregion
 
   onOk() {
     if (!this.connectionForm.valid) {
@@ -74,7 +87,30 @@ export class ConnectionDialogComponent implements OnInit {
   }
 
   onTestConnection() {
-    console.log('TODO: test the connection');
+    if (!this.connectionForm.valid) {
+      return;
+    }
+
+    this.state = State.TestConnection;
+
+    const connectSubscription = this.redis.redisTestConnectStatus$.subscribe(status => {
+      switch (status.status) {
+        case notifications.RedisConnectStatus.ConnectSuccess:
+          this.snackBar.open(`Connection success`, 'Ok', {
+            duration: 3000
+          });
+          break;
+        case notifications.RedisConnectStatus.ConnectFailed:
+          this.snackBar.open(`Connection failed`, 'Ok');
+          break;
+        default:
+          return;
+      }
+
+      connectSubscription.unsubscribe();
+      this.state = State.Idle;
+    });
+    this.redis.testConnect(this.address, this.port);
   }
 
 }

@@ -145,6 +145,10 @@ ipcMain.on(commands.RedisConfigRemove, (_: IpcMessageEvent, connection: string) 
     win!.webContents.send(notifications.RedisConnectionRemoved, connection);
 });
 
+ipcMain.on(commands.RedisTestConnect, (_: IpcMessageEvent, host: string, port: number) => {
+    testConnectRedis(host, port);
+});
+
 ipcMain.on(commands.RedisConnect, (_: IpcMessageEvent, connection: string) => {
     connectRedis(connection);
 });
@@ -175,7 +179,20 @@ ipcMain.on(commands.RedisCommand, (_: IpcMessageEvent, connection: string, cmd: 
 
 //#region Redis
 
-// https://www.npmjs.com/package/redis
+function testConnectRedis(host: string, port: number) {
+    console.log(`Test connecting redis ${host}:${port}...`);
+
+    win!.webContents.send(notifications.RedisTestConnect, host, port, notifications.RedisConnectStatus.Connecting);
+
+    const client = connectRedisHost(host, port, (reason) => {
+        win!.webContents.send(notifications.RedisTestConnect, host, port, notifications.RedisConnectStatus.ConnectFailed, reason);
+    });
+
+    client.on('ready', () => {
+        win!.webContents.send(notifications.RedisTestConnect, host, port, notifications.RedisConnectStatus.ConnectSuccess);
+        client.quit();
+    });
+}
 
 function connectRedis(connection: string) {
     disconnectRedis(connection, true);
@@ -201,29 +218,9 @@ function connectRedisConfig(connection: string, config: RedisServerConfig) {
 
     win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.Connecting);
 
-    const client = redis.createClient(config.port, config.host, {
-        //password: config.password,
-
-        // TODO: setting this seems to not emit the error event ?
-        retry_strategy: (options) => {
-            if (options.error && options.error.code === 'ECONNREFUSED') {
-                win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed, 'Connection refused');
-                return options.error;
-            }
-
-            // give up :shrug:
-            if (options.attempt > 10) {
-                win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed, 'Max retries attempted');
-                return new Error('Max retries attempted');
-            }
-
-            const retryms = Math.min(options.attempt * 100, 3000);
-            console.warn(`Connection attempt ${options.attempt} failed, retrying in ${retryms}...`);
-            return retryms;
-        }
+    const client = connectRedisHost(config.host, config.port, (reason) => {
+        win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectFailed, reason);
     });
-
-    // TODO: we should also store pending connections so that we don't have multiples in-flight
 
     client.on('warning', (warn) => {
         console.warn(`Redis Warning (${connection}): ${warn}`);
@@ -239,6 +236,31 @@ function connectRedisConfig(connection: string, config: RedisServerConfig) {
 
         win!.webContents.send(notifications.RedisConnect, connection, notifications.RedisConnectStatus.ConnectSuccess);
     });
+}
+
+function connectRedisHost(host: string, port: number, onError: (reason: string) => void) {
+    return redis.createClient(port, host, {
+        //password: config.password,
+
+        retry_strategy: (options) => {
+            if (options.error && options.error.code === 'ECONNREFUSED') {
+                onError('Connection refused');
+                return options.error;
+            }
+
+            // give up :shrug:
+            if (options.attempt > 10) {
+                onError('Max retries attempted');
+                return new Error('Max retries attempted');
+            }
+
+            const retryms = Math.min(options.attempt * 100, 3000);
+            console.warn(`Connection attempt ${options.attempt} failed, retrying in ${retryms}...`);
+            return retryms;
+        }
+    });
+
+    // TODO: we should also store pending connections so that we don't have multiples in-flight
 }
 
 function disconnectRedis(connection: string, notify: boolean) {

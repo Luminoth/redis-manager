@@ -11,3 +11,10 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.spinner-button {
+    .mat-spinner {
+        margin-top: 6px;
+        margin-bottom: 8px;
+    }
+}

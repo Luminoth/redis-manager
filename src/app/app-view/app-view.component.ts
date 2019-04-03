@@ -18,9 +18,9 @@ import * as notifications from '../../../electron/notifications';
 })
 export class AppViewComponent implements OnInit, OnDestroy {
 
+  // subscriptions
   private connectionAddedSubscription: Subscription;
   private connectionRemovedSubscription: Subscription;
-
   private redisConnectStatusSubscription: Subscription;
   private redisDisconnectSubscription: Subscription;
 
@@ -32,13 +32,13 @@ export class AppViewComponent implements OnInit, OnDestroy {
     private electron: AppElectronService,
     private redis: RedisService) {
     this.connectionAddedSubscription = this.electron.redisConnectionAdded$.subscribe((connection: string) => {
-      this.snackBar.open(`Redis connection '${connection}' added`, undefined, {
+      this.snackBar.open(`Redis connection '${connection}' added`, 'Ok', {
         duration: 3000
       });
     });
 
     this.connectionRemovedSubscription = this.electron.redisConnectionRemoved$.subscribe((connection: string) => {
-      this.snackBar.open(`Redis connection '${connection}' removed`, undefined, {
+      this.snackBar.open(`Redis connection '${connection}' removed`, 'Ok', {
         duration: 3000
       });
     });
@@ -46,21 +46,19 @@ export class AppViewComponent implements OnInit, OnDestroy {
     this.redisConnectStatusSubscription = this.redis.redisConnectStatus$.subscribe((status: RedisConnectStatus) => {
       switch (status.status) {
         case notifications.RedisConnectStatus.ConnectSuccess:
-          this.snackBar.open(`Redis connection '${status.connection}' connected`, undefined, {
+          this.snackBar.open(`Redis connection '${status.connection}' connected`, 'Ok', {
             duration: 3000
           });
           break;
         case notifications.RedisConnectStatus.ConnectFailed:
-          this.snackBar.open(`Redis connection '${status.connection}' failed`, undefined, {
-            duration: 3000
-          });
+          this.snackBar.open(`Redis connection '${status.connection}' failed`, 'Ok');
           break;
       }
     });
 
     this.redisDisconnectSubscription = this.redis.redisDisconnect$.subscribe((connection: string) => {
-      this.snackBar.open(`Redis connection '${connection}' disconnected`, undefined, {
-        duration: 3000
+      this.snackBar.open(`Redis connection '${connection}' disconnected`, 'Ok', {
+        duration: 5000
       });
     });
   }
