@@ -24,6 +24,7 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
   // this should probably do something more like that
   // since it seems like it has a much cleaner way of connecting the data
 
+  // subscriptions
   private reloadSubscription: Subscription;
 
   treeControl = new FlatTreeControl<RedisServerNode>(

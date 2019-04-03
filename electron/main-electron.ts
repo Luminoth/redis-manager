@@ -154,7 +154,7 @@ ipcMain.on(commands.RedisConnect, (_: IpcMessageEvent, connection: string) => {
 });
 
 ipcMain.on(commands.RedisDisconnect, (_: IpcMessageEvent, connection: string) => {
-    disconnectRedis(connection, false);
+    disconnectRedis(connection, true);
 });
 
 ipcMain.on(commands.RedisCommand, (_: IpcMessageEvent, connection: string, cmd: string) => {

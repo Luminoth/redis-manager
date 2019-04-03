@@ -31,19 +31,19 @@ export class AppViewComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private electron: AppElectronService,
     private redis: RedisService) {
-    this.connectionAddedSubscription = this.electron.redisConnectionAdded$.subscribe((connection: string) => {
+    this.connectionAddedSubscription = this.electron.redisConnectionAdded$.subscribe(connection => {
       this.snackBar.open(`Redis connection '${connection}' added`, 'Ok', {
         duration: 3000
       });
     });
 
-    this.connectionRemovedSubscription = this.electron.redisConnectionRemoved$.subscribe((connection: string) => {
+    this.connectionRemovedSubscription = this.electron.redisConnectionRemoved$.subscribe(connection => {
       this.snackBar.open(`Redis connection '${connection}' removed`, 'Ok', {
         duration: 3000
       });
     });
 
-    this.redisConnectStatusSubscription = this.redis.redisConnectStatus$.subscribe((status: RedisConnectStatus) => {
+    this.redisConnectStatusSubscription = this.redis.redisConnectStatus$.subscribe(status => {
       switch (status.status) {
         case notifications.RedisConnectStatus.ConnectSuccess:
           this.snackBar.open(`Redis connection '${status.connection}' connected`, 'Ok', {
@@ -56,7 +56,7 @@ export class AppViewComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.redisDisconnectSubscription = this.redis.redisDisconnect$.subscribe((connection: string) => {
+    this.redisDisconnectSubscription = this.redis.redisDisconnect$.subscribe(connection => {
       this.snackBar.open(`Redis connection '${connection}' disconnected`, 'Ok', {
         duration: 5000
       });

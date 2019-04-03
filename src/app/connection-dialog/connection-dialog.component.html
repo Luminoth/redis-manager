@@ -1,56 +1,54 @@
 <div fxLayout="column" fxFlexFill>
   <h1 mat-dialog-title>New Connection Settings</h1>
-  <div mat-dialog-content fxFlex>
-    <mat-horizontal-stepper linear="true" labelPosition="bottom">
-      <mat-step [stepControl]="connectionForm">
-        <ng-template matStepLabel>Connection Settings</ng-template>
-        <div fxLayout="column" [formGroup]="connectionForm">
-          <mat-form-field>
-            <input matInput placeholder="Name" formControlName="name" [attr.disabled]="state != State.Idle ? '' : null"
-              required>
+  <mat-horizontal-stepper linear="true" labelPosition="bottom">
+    <mat-step [stepControl]="connectionForm">
+      <ng-template matStepLabel>Connection Settings</ng-template>
+      <div fxLayout="column" fxFlexFill [formGroup]="connectionForm">
+        <mat-form-field>
+          <input matInput placeholder="Name" formControlName="name" [attr.disabled]="state != State.Idle ? '' : null"
+            required>
+        </mat-form-field>
+        <div fxLayout="row">
+          <mat-form-field fxFlex>
+            <input matInput placeholder="Address" formControlName="address"
+              [attr.disabled]="state != State.Idle ? '' : null" required>
           </mat-form-field>
-          <div fxLayout="row">
-            <mat-form-field fxFlex>
-              <input matInput placeholder="Address" formControlName="address"
-                [attr.disabled]="state != State.Idle ? '' : null" required>
-            </mat-form-field>
-            <mat-form-field>
-              <input type="number" matInput placeholder="Port" formControlName="port"
-                [attr.disabled]="state != State.Idle ? '' : null" required>
-            </mat-form-field>
-          </div>
-          <div fxLayout="row">
-            <button mat-raised-button color="accent" matStepperNext>Next</button>
-          </div>
+          <mat-form-field>
+            <input type="number" matInput placeholder="Port" formControlName="port"
+              [attr.disabled]="state != State.Idle ? '' : null" required>
+          </mat-form-field>
         </div>
-      </mat-step>
-      <mat-step [stepControl]="securityForm" optional="true">
-        <ng-template matStepLabel>Security Settings</ng-template>
-        <div fxLayout="column" [formGroup]="securityForm">
-          <div fxLayout="row">
-            <button mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button color="accent" matStepperNext>Next</button>
-          </div>
+        <div class="button-row" fxLayout="row">
+          <button mat-raised-button color="accent" matStepperNext>Next</button>
         </div>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
-        <div fxLayout="column">
-          <div fxLayout="row" mat-dialog-actions>
-            <button mat-raised-button matStepperPrevious [disabled]="state != State.Idle">Back</button>
-            <button mat-raised-button color="primary" (click)="onOk()"
-              [disabled]="state != State.Idle || !connectionForm.valid">Save</button>
-            <span fxFlex></span>
-            <button class="spinner-button" mat-raised-button color="accent" (click)="onTestConnection()"
-              [disabled]="state != State.Idle || !connectionForm.valid">
-              <mat-spinner *ngIf="state == State.TestConnection;else test_connection_text" diameter="25"></mat-spinner>
-              <ng-template #test_connection_text>
-                Test Connection
-              </ng-template>
-            </button>
-          </div>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="securityForm" optional="true">
+      <ng-template matStepLabel>Security Settings</ng-template>
+      <div fxLayout="column" fxFlexFill [formGroup]="securityForm">
+        <div class="button-row" fxLayout="row">
+          <button mat-raised-button matStepperPrevious>Back</button>
+          <button mat-raised-button color="accent" matStepperNext>Next</button>
         </div>
-      </mat-step>
-    </mat-horizontal-stepper>
-  </div>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <div fxLayout="column" fxFlexFill>
+        <div fxLayout="row" mat-dialog-actions>
+          <button mat-raised-button matStepperPrevious [disabled]="state != State.Idle">Back</button>
+          <button mat-raised-button color="primary" (click)="onOk()"
+            [disabled]="state != State.Idle || !connectionForm.valid">Save</button>
+          <span fxFlex></span>
+          <button class="spinner-button" mat-raised-button color="accent" (click)="onTestConnection()"
+            [disabled]="state != State.Idle || !connectionForm.valid">
+            <mat-spinner *ngIf="state == State.TestConnection;else test_connection_text" diameter="25"></mat-spinner>
+            <ng-template #test_connection_text>
+              Test Connection
+            </ng-template>
+          </button>
+        </div>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
 </div>
