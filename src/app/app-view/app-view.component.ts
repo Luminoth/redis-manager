@@ -77,6 +77,8 @@ export class AppViewComponent implements OnInit, OnDestroy {
 
   //#endregion
 
+  //#region Events
+
   onConnectRedis() {
     this.dialog.open(ConnectionDialogComponent, {
       width: '800px',
@@ -90,4 +92,6 @@ export class AppViewComponent implements OnInit, OnDestroy {
       height: '600px',
     });
   }
+
+  //#endregion
 }

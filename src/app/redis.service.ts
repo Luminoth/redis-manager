@@ -94,6 +94,8 @@ export class RedisService {
 
   //#endregion
 
+  //#region Commands
+
   testConnect(host: string, port: number) {
     this.electron.ipcRenderer.send(commands.RedisTestConnect, host, port);
   }
@@ -110,5 +112,7 @@ export class RedisService {
     this.log.appendLog(`${connection}> [Cmd] ${cmd}`);
     this.electron.ipcRenderer.send(commands.RedisCommand, connection, cmd);
   }
+
+  //#endregion
 
 }

@@ -5,17 +5,14 @@
       <ng-template matStepLabel>Connection Settings</ng-template>
       <div fxLayout="column" fxFlexFill [formGroup]="connectionForm">
         <mat-form-field>
-          <input matInput placeholder="Name" formControlName="name" [attr.disabled]="state != State.Idle ? '' : null"
-            required>
+          <input matInput placeholder="Name" formControlName="name" required>
         </mat-form-field>
         <div fxLayout="row">
           <mat-form-field fxFlex>
-            <input matInput placeholder="Address" formControlName="address"
-              [attr.disabled]="state != State.Idle ? '' : null" required>
+            <input matInput placeholder="Address" formControlName="address" required>
           </mat-form-field>
           <mat-form-field>
-            <input type="number" matInput placeholder="Port" formControlName="port"
-              [attr.disabled]="state != State.Idle ? '' : null" required>
+            <input type="number" matInput placeholder="Port" formControlName="port" required>
           </mat-form-field>
         </div>
         <div class="button-row" fxLayout="row">

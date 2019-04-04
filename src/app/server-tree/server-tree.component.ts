@@ -66,6 +66,8 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
 
   hasChild = (_: number, node: RedisServerNode) => node.expandable;
 
+  //#region Events
+
   onConnect(connection: string) {
     this.redis.connect(connection);
   }
@@ -78,5 +80,7 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
     // TODO: pop up a dialog confirming!
     this.electron.removeRedisConfig(connection);
   }
+
+  //#endregion
 
 }

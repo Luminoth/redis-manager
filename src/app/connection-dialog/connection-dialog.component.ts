@@ -18,11 +18,11 @@ enum State {
   styleUrls: ['./connection-dialog.component.scss']
 })
 export class ConnectionDialogComponent implements OnInit {
+  State = State;
+  private _state = State.Idle;
+
   connectionForm!: FormGroup;
   securityForm!: FormGroup;
-
-  State = State;
-  state = State.Idle;
 
   //#region Lifecycle
 
@@ -56,6 +56,21 @@ export class ConnectionDialogComponent implements OnInit {
 
   //#endregion
 
+  get state() {
+    return this._state;
+  }
+
+  set state(state: State) {
+    this._state = state;
+    if (this.state === State.Idle) {
+      this.connectionForm.enable();
+      this.securityForm.enable();
+    } else {
+      this.connectionForm.disable();
+      this.securityForm.disable();
+    }
+  }
+
   //#region Connection Form
 
   get name() {
@@ -71,6 +86,8 @@ export class ConnectionDialogComponent implements OnInit {
   }
 
   //#endregion
+
+  //#region Events
 
   onOk() {
     if (!this.connectionForm.valid) {
@@ -112,5 +129,7 @@ export class ConnectionDialogComponent implements OnInit {
     });
     this.redis.testConnect(this.address, this.port);
   }
+
+  //#endregion
 
 }
