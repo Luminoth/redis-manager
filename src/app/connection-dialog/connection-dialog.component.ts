@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { AppElectronService } from '../app-electron.service';
+import { Config } from '../../../electron/config';
 import { RedisService } from '../redis.service';
-import { nameInUseValidator } from '../redis-server-config.directive';
 import * as notifications from '../../../electron/notifications';
 
 enum State {
   Idle,
   TestConnection,
+}
+
+function nameInUseValidator(config: Config): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    return config.redisConfig.find(redisConfig => redisConfig.name === control.value)
+      ? { 'nameInUse': { value: control.value } }
+      : null;
+  };
 }
 
 @Component({

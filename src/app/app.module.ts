@@ -20,8 +20,6 @@ import { ConsoleViewComponent } from './console-view/console-view.component';
 import { ConnectionDialogComponent } from './connection-dialog/connection-dialog.component';
 import { SettingsDialogComponent } from './settings-dialog/settings-dialog.component';
 
-import { RedisServerConfigDirective } from './redis-server-config.directive';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,8 +31,7 @@ import { RedisServerConfigDirective } from './redis-server-config.directive';
     LogViewComponent,
     ConsoleViewComponent,
     ConnectionDialogComponent,
-    SettingsDialogComponent,
-    RedisServerConfigDirective
+    SettingsDialogComponent
   ],
   imports: [
     BrowserModule,
