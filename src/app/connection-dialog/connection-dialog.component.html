@@ -1,38 +1,47 @@
 <h1 mat-dialog-title>New Connection Settings</h1>
 <mat-dialog-content>
   <mat-horizontal-stepper linear="true" labelPosition="bottom">
+    <!-- Connection -->
     <mat-step [stepControl]="connectionForm">
       <ng-template matStepLabel>Connection Settings</ng-template>
-      <div fxLayout="column" fxFlexFill [formGroup]="connectionForm">
-        <mat-form-field>
-          <input matInput placeholder="Name" formControlName="name" required>
-        </mat-form-field>
-        <div fxLayout="row">
-          <mat-form-field fxFlex>
-            <input matInput placeholder="Address" formControlName="address" required>
-          </mat-form-field>
+      <div fxLayout="column" [formGroup]="connectionForm">
+        <div fxFlex>
           <mat-form-field>
-            <input type="number" matInput placeholder="Port" formControlName="port" required>
+            <input matInput placeholder="Name" formControlName="name" required>
           </mat-form-field>
+          <div fxLayout="row">
+            <mat-form-field fxFlex>
+              <input matInput placeholder="Address" formControlName="address" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input type="number" matInput placeholder="Port" formControlName="port" required>
+            </mat-form-field>
+          </div>
         </div>
         <div class="button-row" fxLayout="row">
-          <button mat-raised-button color="accent" matStepperNext>Next</button>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
         </div>
       </div>
     </mat-step>
+    <!-- Security -->
     <mat-step [stepControl]="securityForm" optional="true">
       <ng-template matStepLabel>Security Settings</ng-template>
-      <div fxLayout="column" fxFlexFill [formGroup]="securityForm">
+      <div fxLayout="column" [formGroup]="securityForm">
+        <div fxFlex>
+          TODO
+        </div>
         <div class="button-row" fxLayout="row">
           <button mat-raised-button matStepperPrevious>Back</button>
-          <button mat-raised-button color="accent" matStepperNext>Next</button>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
         </div>
       </div>
     </mat-step>
+    <!-- Complete -->
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
-      <div fxLayout="column" fxFlexFill>
-        <div fxLayout="row" mat-dialog-actions>
+      <div fxLayout="column">
+        <div fxFlex></div>
+        <div class="button-row" fxLayout="row">
           <button mat-raised-button matStepperPrevious [disabled]="state != State.Idle">Back</button>
           <button mat-raised-button color="primary" (click)="onOk()"
             [disabled]="state != State.Idle || !connectionForm.valid">Save</button>

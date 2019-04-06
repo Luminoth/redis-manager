@@ -13,15 +13,15 @@ import * as notifications from '../../electron/notifications';
 })
 export class AppElectronService {
 
-  private reloadConfigSource = new Subject();
-  private redisConnectionAddedSource = new Subject<string>();
-  private redisConnectionRemovedSource = new Subject<string>();
+  private _reloadConfigSource = new Subject();
+  private _redisConnectionAddedSource = new Subject<string>();
+  private _redisConnectionRemovedSource = new Subject<string>();
 
   //#region Streams
 
-  reloadConfig$ = this.reloadConfigSource.asObservable();
-  redisConnectionAdded$ = this.redisConnectionAddedSource.asObservable();
-  redisConnectionRemoved$ = this.redisConnectionRemovedSource.asObservable();
+  reloadConfig$ = this._reloadConfigSource.asObservable();
+  redisConnectionAdded$ = this._redisConnectionAddedSource.asObservable();
+  redisConnectionRemoved$ = this._redisConnectionRemovedSource.asObservable();
 
   //#endregion
 
@@ -33,19 +33,19 @@ export class AppElectronService {
 
     this.electron.ipcRenderer.on(notifications.ConfigReload, () => {
       this.zone.run(() => {
-        this.reloadConfigSource.next();
+        this._reloadConfigSource.next();
       });
     });
 
     this.electron.ipcRenderer.on(notifications.RedisConnectionAdded, (_: IpcMessageEvent, connection: string) => {
       this.zone.run(() => {
-        this.redisConnectionAddedSource.next(connection);
+        this._redisConnectionAddedSource.next(connection);
       });
     });
 
     this.electron.ipcRenderer.on(notifications.RedisConnectionRemoved, (_: IpcMessageEvent, connection: string) => {
       this.zone.run(() => {
-        this.redisConnectionRemovedSource.next(connection);
+        this._redisConnectionRemovedSource.next(connection);
       });
     });
   }

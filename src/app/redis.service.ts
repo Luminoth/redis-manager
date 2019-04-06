@@ -28,17 +28,17 @@ export interface RedisResponse {
 })
 export class RedisService {
 
-  private redisTestConnectStatusSource = new Subject<RedisTestConnectStatus>();
-  private redisConnectStatusSource = new Subject<RedisConnectStatus>();
-  private redisDisconnectSource = new Subject<string>();
-  private redisResponseSource = new Subject<RedisResponse>();
+  private _redisTestConnectStatusSource = new Subject<RedisTestConnectStatus>();
+  private _redisConnectStatusSource = new Subject<RedisConnectStatus>();
+  private _redisDisconnectSource = new Subject<string>();
+  private _redisResponseSource = new Subject<RedisResponse>();
 
   //#region Streams
 
-  redisTestConnectStatus$ = this.redisTestConnectStatusSource.asObservable();
-  redisConnectStatus$ = this.redisConnectStatusSource.asObservable();
-  redisDisconnect$ = this.redisDisconnectSource.asObservable();
-  redisResponse$ = this.redisResponseSource.asObservable();
+  redisTestConnectStatus$ = this._redisTestConnectStatusSource.asObservable();
+  redisConnectStatus$ = this._redisConnectStatusSource.asObservable();
+  redisDisconnect$ = this._redisDisconnectSource.asObservable();
+  redisResponse$ = this._redisResponseSource.asObservable();
 
   //#endregion
 
@@ -53,7 +53,7 @@ export class RedisService {
       this.zone.run(() => {
         this.log.appendLog(`${host}:${port}> test connect '${status}'`);
 
-        this.redisTestConnectStatusSource.next({
+        this._redisTestConnectStatusSource.next({
           host: host,
           port: port,
           status: status
@@ -65,7 +65,7 @@ export class RedisService {
       this.zone.run(() => {
         this.log.appendLog(`${connection}> connect '${status}'`);
 
-        this.redisConnectStatusSource.next({
+        this._redisConnectStatusSource.next({
           connection: connection,
           status: status
         });
@@ -76,7 +76,7 @@ export class RedisService {
       this.zone.run(() => {
         this.log.appendLog(`${connection}> disconnect`);
 
-        this.redisDisconnectSource.next(connection);
+        this._redisDisconnectSource.next(connection);
       });
     });
 
@@ -84,7 +84,7 @@ export class RedisService {
       this.zone.run(() => {
         this.log.appendLog(`${connection}> [Resp] ${response}`);
 
-        this.redisResponseSource.next({
+        this._redisResponseSource.next({
           connection: connection,
           response: response
         });

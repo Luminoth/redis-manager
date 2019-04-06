@@ -1,10 +1,12 @@
-<div fxLayout="column" fxFlexFill [formGroup]="settingsForm">
-  <h1 mat-dialog-title>Settings</h1>
-  <div mat-dialog-content fxFlex>
+<h1 mat-dialog-title>Settings</h1>
+<mat-dialog-content fxLayout="column" [formGroup]="settingsForm">
+  <div fxFlex>
+    TODO
   </div>
-  <div fxLayout="row" mat-dialog-actions>
-    <span fxFlex></span>
-    <button mat-raised-button color="primary" (click)="onOk()" [disabled]="!settingsForm.valid">Ok</button>
-    <button mat-raised-button mat-dialog-close>Cancel</button>
-  </div>
-</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row">
+  <span fxFlex></span>
+  <button mat-raised-button color="primary" (click)="onOk()"
+    [disabled]="state != State.Idle || !settingsForm.valid">Ok</button>
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

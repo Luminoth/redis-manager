@@ -24,15 +24,12 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
   // this should probably do something more like that
   // since it seems like it has a much cleaner way of connecting the data
 
-  // subscriptions
-  private reloadSubscription: Subscription;
-
   treeControl = new FlatTreeControl<RedisServerNode>(
     node => node.level,
     node => node.expandable
   );
 
-  private transformer = (node: RedisServerConfig, level: number): RedisServerNode => {
+  private transformFunction = (node: RedisServerConfig, level: number) => {
     return {
       expandable: this.electron.redisConnections.has(node.name),
       name: node.name,
@@ -40,16 +37,19 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
     };
   }
 
-  treeFlattener = new MatTreeFlattener(
-    this.transformer, node => node.level, node => node.expandable, node => null);
+  private _treeFlattener = new MatTreeFlattener(
+    this.transformFunction, node => node.level, node => node.expandable, () => null);
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this._treeFlattener);
+
+  // subscriptions
+  private _reloadSubscription: Subscription;
 
   //#region Lifecycle
 
   constructor(private electron: AppElectronService,
     private redis: RedisService) {
-    this.reloadSubscription = this.electron.reloadConfig$.subscribe(() => {
+    this._reloadSubscription = this.electron.reloadConfig$.subscribe(() => {
       this.dataSource.data = this.electron.config.redisConfig;
     });
   }
@@ -59,12 +59,14 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.reloadSubscription.unsubscribe();
+    this._reloadSubscription.unsubscribe();
   }
 
   //#endregion
 
-  hasChild = (_: number, node: RedisServerNode) => node.expandable;
+  hasChild(_: number, node: RedisServerNode) {
+    return node.expandable;
+  }
 
   //#region Events
 

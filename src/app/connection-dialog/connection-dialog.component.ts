@@ -42,6 +42,12 @@ export class ConnectionDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.createForm();
+  }
+
+  //#endregion
+
+  private createForm() {
     this.connectionForm = this.fb.group({
       name: ['', [
         Validators.required,
@@ -61,8 +67,6 @@ export class ConnectionDialogComponent implements OnInit {
     this.securityForm = this.fb.group({
     });
   }
-
-  //#endregion
 
   get state() {
     return this._state;

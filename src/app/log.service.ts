@@ -15,7 +15,7 @@ class LogMessage {
 })
 export class LogService {
 
-  private logMessages: LogMessage[] = [];
+  private _logMessages: LogMessage[] = [];
 
   //#region Lifecycle
 
@@ -25,7 +25,7 @@ export class LogService {
   //#endregion
 
   get logString() {
-    return this.logMessages.join('\n');
+    return this._logMessages.join('\n');
   }
 
   appendLog(message: string) {
@@ -36,7 +36,7 @@ export class LogService {
 
     //console.log(logMessage.toString());
     console.log(logMessage.message);
-    this.logMessages.push(logMessage);
+    this._logMessages.push(logMessage);
   }
 
 }
