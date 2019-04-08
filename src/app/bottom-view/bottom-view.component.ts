@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 enum BottomViewTabType {
   Log,
+  Console,
 }
 
 interface BottomViewTab {
@@ -30,10 +31,17 @@ export class BottomViewComponent implements OnInit {
 
   //#endregion
 
-  private addLogView() {
+  addLogView() {
     this.tabs.push({
       label: 'Log',
       type: BottomViewTabType.Log,
+    });
+  }
+
+  addConsoleView() {
+    this.tabs.push({
+      label: 'Console',
+      type: BottomViewTabType.Console,
     });
   }
 

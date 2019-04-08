@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { AppViewComponent } from './app-view/app-view.component';
 import { ServerTreeComponent } from './server-tree/server-tree.component';
 import { TopViewComponent } from './top-view/top-view.component';
+import { WelcomeViewComponent } from './welcome-view/welcome-view.component';
 import { KeyViewComponent } from './key-view/key-view.component';
 import { BottomViewComponent } from './bottom-view/bottom-view.component';
 import { LogViewComponent } from './log-view/log-view.component';
@@ -26,6 +27,7 @@ import { SettingsDialogComponent } from './settings-dialog/settings-dialog.compo
     AppViewComponent,
     ServerTreeComponent,
     TopViewComponent,
+    WelcomeViewComponent,
     KeyViewComponent,
     BottomViewComponent,
     LogViewComponent,
