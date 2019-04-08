@@ -1,12 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 
+enum BottomViewTabType {
+  Log,
+}
+
+interface BottomViewTab {
+  label: string;
+  type: BottomViewTabType;
+}
+
 @Component({
   selector: 'app-bottom-view',
   templateUrl: './bottom-view.component.html',
   styleUrls: ['./bottom-view.component.scss']
 })
 export class BottomViewComponent implements OnInit {
-  tabs: string[] = [];
+  TabType = BottomViewTabType;
+
+  tabs: BottomViewTab[] = [];
 
   //#region Lifecycle
 
@@ -19,8 +30,11 @@ export class BottomViewComponent implements OnInit {
 
   //#endregion
 
-  addLogView() {
-    this.tabs.push('Log');
+  private addLogView() {
+    this.tabs.push({
+      label: 'Log',
+      type: BottomViewTabType.Log,
+    });
   }
 
 }
