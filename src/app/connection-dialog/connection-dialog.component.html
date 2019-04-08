@@ -5,7 +5,7 @@
     <mat-step [stepControl]="connectionForm">
       <ng-template matStepLabel>Connection Settings</ng-template>
       <div fxLayout="column" [formGroup]="connectionForm">
-        <div fxFlex>
+        <div fxFlexFill>
           <mat-form-field>
             <input matInput placeholder="Name" formControlName="name" required>
           </mat-form-field>
@@ -27,7 +27,7 @@
     <mat-step [stepControl]="securityForm" optional="true">
       <ng-template matStepLabel>Security Settings</ng-template>
       <div fxLayout="column" [formGroup]="securityForm">
-        <div fxFlex>
+        <div fxFlexFill>
           TODO
         </div>
         <div class="button-row" fxLayout="row">
@@ -40,7 +40,7 @@
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
       <div fxLayout="column">
-        <div fxFlex></div>
+        <div fxFlexFill></div>
         <div class="button-row" fxLayout="row">
           <button mat-raised-button matStepperPrevious [disabled]="state != State.Idle">Back</button>
           <button mat-raised-button color="primary" (click)="onOk()"
