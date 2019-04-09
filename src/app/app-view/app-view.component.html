@@ -1,20 +1,22 @@
-<mat-toolbar class="button-row" color="primary" fxLayout="row">
+<mat-toolbar class="toolbar-fixed mat-elevation-z6" color="primary" fxLayout="row">
   <button mat-raised-button (click)="onConnectRedis()">Connect to Redis</button>
   <span fxFlex></span>
   <button mat-raised-button (click)="onSettings()">Settings</button>
 </mat-toolbar>
-<as-split direction="horizontal">
-  <as-split-area size="25">
-    <app-server-tree></app-server-tree>
-  </as-split-area>
-  <as-split-area size="75">
-    <as-split direction="vertical">
-      <as-split-area size="75">
-        <app-top-view></app-top-view>
-      </as-split-area>
-      <as-split-area size="25">
-        <app-bottom-view></app-bottom-view>
-      </as-split-area>
-    </as-split>
-  </as-split-area>
-</as-split>
+<div class="main-content">
+  <as-split direction="horizontal">
+    <as-split-area size="25">
+      <app-server-tree></app-server-tree>
+    </as-split-area>
+    <as-split-area size="75">
+      <as-split direction="vertical">
+        <as-split-area size="75">
+          <app-top-view></app-top-view>
+        </as-split-area>
+        <as-split-area size="25">
+          <app-bottom-view></app-bottom-view>
+        </as-split-area>
+      </as-split>
+    </as-split-area>
+  </as-split>
+</div>

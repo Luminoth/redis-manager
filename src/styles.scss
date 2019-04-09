@@ -17,6 +17,18 @@ body {
     width: 100%;
 }
 
+.toolbar-fixed {
+    position: fixed;
+    z-index: 998;
+    height: 64px;
+}
+
+.main-content {
+    position: relative;
+    top: 64px;
+    height: calc(100vh - 64px);
+}
+
 .spinner-button {
     .mat-progress-spinner {
         margin: 8px;
@@ -28,4 +40,12 @@ body {
         margin-top: 8px;
         margin-right: 8px;
     }
+}
+
+.container-15 {
+    padding: 15px;
+}
+
+.text-nowrap {
+    white-space: nowrap;
 }
