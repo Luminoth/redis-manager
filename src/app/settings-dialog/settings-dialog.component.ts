@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component, OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 enum State {
@@ -9,10 +12,11 @@ enum State {
 @Component({
   selector: 'app-settings-dialog',
   templateUrl: './settings-dialog.component.html',
-  styleUrls: ['./settings-dialog.component.scss']
+  styleUrls: ['./settings-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsDialogComponent implements OnInit {
-  State = State;
+  readonly State = State;
   private _state = State.Idle;
 
   private settingsForm!: FormGroup;

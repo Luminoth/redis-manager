@@ -1,10 +1,19 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogService {
+
+  private _logSource = new Subject<string>();
+
+  //#region Streams
+
+  log$ = this._logSource.asObservable();
+
+  //#endregion
 
   private _logMessages: string[] = [];
 
@@ -24,6 +33,8 @@ export class LogService {
 
     console.log(logMessage);
     this._logMessages.push(logMessage);
+
+    this._logSource.next(logMessage);
   }
 
 }

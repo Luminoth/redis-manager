@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component, OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 @Component({
   selector: 'app-console-view',
   templateUrl: './console-view.component.html',
-  styleUrls: ['./console-view.component.scss']
+  styleUrls: ['./console-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConsoleViewComponent implements OnInit {
 
-  constructor() { }
+  //#region Lifecycle
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
+
+  //#endregion
 
 }

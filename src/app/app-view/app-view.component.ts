@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -14,7 +17,8 @@ import * as notifications from '../../../electron/notifications';
 @Component({
   selector: 'app-app-view',
   templateUrl: './app-view.component.html',
-  styleUrls: ['./app-view.component.scss']
+  styleUrls: ['./app-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppViewComponent implements OnInit, OnDestroy {
 

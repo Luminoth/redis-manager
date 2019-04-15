@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component, OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 @Component({
   selector: 'app-key-view',
   templateUrl: './key-view.component.html',
-  styleUrls: ['./key-view.component.scss']
+  styleUrls: ['./key-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeyViewComponent implements OnInit {
 
-  constructor() { }
+  //#region Lifecycle
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
+
+  //#endregion
 
 }

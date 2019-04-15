@@ -42,13 +42,13 @@
       <div fxLayout="column">
         <div fxFlexFill></div>
         <div class="button-row" fxLayout="row">
-          <button mat-raised-button matStepperPrevious [disabled]="state != State.Idle">Back</button>
+          <button mat-raised-button matStepperPrevious [disabled]="state !== State.Idle">Back</button>
           <button mat-raised-button color="primary" (click)="onOk()"
-            [disabled]="state != State.Idle || !connectionForm.valid">Save</button>
+            [disabled]="state !== State.Idle || !connectionForm.valid">Save</button>
           <span fxFlex></span>
           <button class="spinner-button" mat-raised-button color="accent" (click)="onTestConnection()"
-            [disabled]="state != State.Idle || !connectionForm.valid">
-            <mat-spinner *ngIf="state == State.TestConnection;else test_connection_text" diameter="25"></mat-spinner>
+            [disabled]="state !== State.Idle || !connectionForm.valid">
+            <mat-spinner *ngIf="state === State.TestConnection;else test_connection_text" diameter="25"></mat-spinner>
             <ng-template #test_connection_text>
               Test Connection
             </ng-template>

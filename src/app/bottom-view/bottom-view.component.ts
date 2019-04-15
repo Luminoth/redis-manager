@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component, OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 enum BottomViewTabType {
   Log,
@@ -13,10 +16,11 @@ interface BottomViewTab {
 @Component({
   selector: 'app-bottom-view',
   templateUrl: './bottom-view.component.html',
-  styleUrls: ['./bottom-view.component.scss']
+  styleUrls: ['./bottom-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BottomViewComponent implements OnInit {
-  TabType = BottomViewTabType;
+  readonly TabType = BottomViewTabType;
 
   tabs: BottomViewTab[] = [];
 

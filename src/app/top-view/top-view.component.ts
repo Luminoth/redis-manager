@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component, OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 enum TopViewTabType {
   Welcome,
@@ -13,10 +16,11 @@ interface TopViewTab {
 @Component({
   selector: 'app-top-view',
   templateUrl: './top-view.component.html',
-  styleUrls: ['./top-view.component.scss']
+  styleUrls: ['./top-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TopViewComponent implements OnInit {
-  TabType = TopViewTabType;
+  readonly TabType = TopViewTabType;
 
   tabs: TopViewTab[] = [];
 

@@ -1,6 +1,6 @@
 <mat-tab-group>
     <mat-tab *ngFor="let tab of tabs" [label]="tab.label">
-        <app-welcome-view *ngIf="tab.type == TabType.Welcome"></app-welcome-view>
-        <app-key-view *ngIf="tab.type == TabType.Key"></app-key-view>
+        <app-welcome-view *ngIf="tab.type === TabType.Welcome"></app-welcome-view>
+        <app-key-view *ngIf="tab.type === TabType.Key"></app-key-view>
     </mat-tab>
 </mat-tab-group>

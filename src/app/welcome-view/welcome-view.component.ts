@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component, OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 @Component({
   selector: 'app-welcome-view',
   templateUrl: './welcome-view.component.html',
-  styleUrls: ['./welcome-view.component.scss']
+  styleUrls: ['./welcome-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WelcomeViewComponent implements OnInit {
 
-  constructor() { }
+  //#region Lifecycle
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
+
+  //#endregion
 
 }

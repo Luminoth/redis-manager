@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import {
+  Component, OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { AppElectronService } from '../app-electron.service';
@@ -13,20 +16,23 @@ enum State {
 }
 
 function nameInUseValidator(config: Config): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    return config.redisConfig.find(redisConfig => redisConfig.name === control.value)
-      ? { 'nameInUse': { value: control.value } }
-      : null;
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (config.redisConfig.find(redisConfig => redisConfig.name === control.value)) {
+      return { 'nameInUse': { value: control.value } };
+    }
+
+    return null;
   };
 }
 
 @Component({
   selector: 'app-connection-dialog',
   templateUrl: './connection-dialog.component.html',
-  styleUrls: ['./connection-dialog.component.scss']
+  styleUrls: ['./connection-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConnectionDialogComponent implements OnInit {
-  State = State;
+  readonly State = State;
   private _state = State.Idle;
 
   connectionForm!: FormGroup;

@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Subscription } from 'rxjs';
@@ -16,7 +19,8 @@ interface RedisServerNode {
 @Component({
   selector: 'app-server-tree',
   templateUrl: './server-tree.component.html',
-  styleUrls: ['./server-tree.component.scss']
+  styleUrls: ['./server-tree.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServerTreeComponent implements OnInit, OnDestroy {
 
