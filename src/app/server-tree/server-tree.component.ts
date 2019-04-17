@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
@@ -51,10 +51,12 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
 
   //#region Lifecycle
 
-  constructor(private electron: AppElectronService,
+  constructor(private cd: ChangeDetectorRef,
+    private electron: AppElectronService,
     private redis: RedisService) {
     this._reloadSubscription = this.electron.reloadConfig$.subscribe(() => {
       this.dataSource.data = this.electron.config.redisConfig;
+      this.cd.detectChanges();
     });
   }
 
