@@ -19,7 +19,7 @@ export class SettingsDialogComponent implements OnInit {
   readonly State = State;
   private _state = State.Idle;
 
-  private settingsForm!: FormGroup;
+  settingsForm!: FormGroup;
 
   //#region Lifecycle
 

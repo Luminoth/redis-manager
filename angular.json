@@ -144,5 +144,8 @@
       }
     }
   },
-  "defaultProject": "redis-manager"
+  "defaultProject": "redis-manager",
+  "cli": {
+    "analytics": "bfd88d14-1b65-4cd4-b39c-6ee7bfae850e"
+  }
 }

@@ -170,7 +170,7 @@ ipcMain.on(commands.RedisCommand, (_: IpcMessageEvent, connection: string, cmd: 
         return;
     }
 
-    client.send_command(cmd, [], (_: redis.RedisError | null, reply: any) => {
+    client.send_command(cmd, [], (_: Error | null, reply: any) => {
         win!.webContents.send(notifications.RedisResponse, connection, reply);
     });
 });
