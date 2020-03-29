@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 
 enum State {
   Idle,

@@ -3,7 +3,8 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 
 import { environment } from '../../environments/environment';

@@ -3,7 +3,8 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
-import { MatDialogRef, MatSnackBar } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AppElectronService } from '../app-electron.service';
 import { Config } from '../../../electron/config';
