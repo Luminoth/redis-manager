@@ -1,6 +1,6 @@
 import { NgZone, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { IpcMessageEvent } from 'electron';
+import { IpcRendererEvent } from 'electron';
 import { ElectronService } from 'ngx-electron';
 import * as redis from 'redis';
 
@@ -37,13 +37,13 @@ export class AppElectronService {
       });
     });
 
-    this.electron.ipcRenderer.on(notifications.RedisConnectionAdded, (_: IpcMessageEvent, connection: string) => {
+    this.electron.ipcRenderer.on(notifications.RedisConnectionAdded, (_: IpcRendererEvent, connection: string) => {
       this.zone.run(() => {
         this._redisConnectionAddedSource.next(connection);
       });
     });
 
-    this.electron.ipcRenderer.on(notifications.RedisConnectionRemoved, (_: IpcMessageEvent, connection: string) => {
+    this.electron.ipcRenderer.on(notifications.RedisConnectionRemoved, (_: IpcRendererEvent, connection: string) => {
       this.zone.run(() => {
         this._redisConnectionRemovedSource.next(connection);
       });

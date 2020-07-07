@@ -1,6 +1,6 @@
 import { NgZone, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { IpcMessageEvent } from 'electron';
+import { IpcRendererEvent } from 'electron';
 import { ElectronService } from 'ngx-electron';
 
 import { LogService } from './log.service';
@@ -49,7 +49,7 @@ export class RedisService {
     private zone: NgZone) {
     // electron callbacks need to run through NgZone so they run in the Angular zone
 
-    this.electron.ipcRenderer.on(notifications.RedisTestConnect, (_: IpcMessageEvent, host: string, port: number, status: notifications.RedisConnectStatus) => {
+    this.electron.ipcRenderer.on(notifications.RedisTestConnect, (_: IpcRendererEvent, host: string, port: number, status: notifications.RedisConnectStatus) => {
       this.zone.run(() => {
         this.log.appendLog(`${host}:${port}> test connect '${status}'`);
 
@@ -61,7 +61,7 @@ export class RedisService {
       });
     });
 
-    this.electron.ipcRenderer.on(notifications.RedisConnect, (_: IpcMessageEvent, connection: string, status: notifications.RedisConnectStatus) => {
+    this.electron.ipcRenderer.on(notifications.RedisConnect, (_: IpcRendererEvent, connection: string, status: notifications.RedisConnectStatus) => {
       this.zone.run(() => {
         this.log.appendLog(`${connection}> connect '${status}'`);
 
@@ -72,7 +72,7 @@ export class RedisService {
       });
     });
 
-    this.electron.ipcRenderer.on(notifications.RedisDisconnect, (_: IpcMessageEvent, connection: string) => {
+    this.electron.ipcRenderer.on(notifications.RedisDisconnect, (_: IpcRendererEvent, connection: string) => {
       this.zone.run(() => {
         this.log.appendLog(`${connection}> disconnect`);
 
@@ -80,7 +80,7 @@ export class RedisService {
       });
     });
 
-    this.electron.ipcRenderer.on(notifications.RedisResponse, (_: IpcMessageEvent, connection: string, response: any) => {
+    this.electron.ipcRenderer.on(notifications.RedisResponse, (_: IpcRendererEvent, connection: string, response: any) => {
       this.zone.run(() => {
         this.log.appendLog(`${connection}> [Resp] ${response}`);
 
