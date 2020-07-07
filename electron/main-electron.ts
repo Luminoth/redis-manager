@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, IpcMessageEvent } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as url from 'url';
@@ -116,7 +116,7 @@ passing the commands through IPC is never really going to work out cleanly
 
 //#region IPC
 
-ipcMain.on(commands.RedisConfigAdd, (_: IpcMessageEvent, config: RedisServerConfig) => {
+ipcMain.on(commands.RedisConfigAdd, (_: IpcMainEvent, config: RedisServerConfig) => {
     disconnectRedis(config.name, true);
 
     global.config.redisConfig.push(config);
@@ -128,7 +128,7 @@ ipcMain.on(commands.RedisConfigAdd, (_: IpcMessageEvent, config: RedisServerConf
     win!.webContents.send(notifications.RedisConnectionAdded, config.name);
 });
 
-ipcMain.on(commands.RedisConfigRemove, (_: IpcMessageEvent, connection: string) => {
+ipcMain.on(commands.RedisConfigRemove, (_: IpcMainEvent, connection: string) => {
     disconnectRedis(connection, true);
 
     for (let i = 0; i < global.config.redisConfig.length; i++) {
@@ -145,19 +145,19 @@ ipcMain.on(commands.RedisConfigRemove, (_: IpcMessageEvent, connection: string) 
     win!.webContents.send(notifications.RedisConnectionRemoved, connection);
 });
 
-ipcMain.on(commands.RedisTestConnect, (_: IpcMessageEvent, host: string, port: number) => {
+ipcMain.on(commands.RedisTestConnect, (_: IpcMainEvent, host: string, port: number) => {
     testConnectRedis(host, port);
 });
 
-ipcMain.on(commands.RedisConnect, (_: IpcMessageEvent, connection: string) => {
+ipcMain.on(commands.RedisConnect, (_: IpcMainEvent, connection: string) => {
     connectRedis(connection);
 });
 
-ipcMain.on(commands.RedisDisconnect, (_: IpcMessageEvent, connection: string) => {
+ipcMain.on(commands.RedisDisconnect, (_: IpcMainEvent, connection: string) => {
     disconnectRedis(connection, true);
 });
 
-ipcMain.on(commands.RedisCommand, (_: IpcMessageEvent, connection: string, cmd: string) => {
+ipcMain.on(commands.RedisCommand, (_: IpcMainEvent, connection: string, cmd: string) => {
     if (!global.redisConnections.has(connection)) {
         if (!connectRedis(connection)) {
             return;
