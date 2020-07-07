@@ -56,7 +56,7 @@
     "@types/node": "^12.12.44",
     "@types/redis": "^2.8.22",
     "codelyzer": "^5.1.2",
-    "electron": "^4.2.12",
+    "electron": "^7.2.4",
     "electron-builder": "^20.44.4",
     "gulp": "^4.0.2",
     "jasmine-core": "~2.99.1",
