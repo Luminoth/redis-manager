@@ -1,0 +1,6 @@
+<mat-tab-group headerPosition="below">
+  <mat-tab *ngFor="let tab of tabs" [label]="tab.label">
+    <app-log-view *ngIf="tab.type === TabType.Log"></app-log-view>
+    <app-console-view *ngIf="tab.type === TabType.Console"></app-console-view>
+  </mat-tab>
+</mat-tab-group>

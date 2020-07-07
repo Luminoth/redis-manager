@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { LogService } from '../log.service';
+import { LogService } from '../../services/log.service';
 
 @Component({
   selector: 'app-log-view',

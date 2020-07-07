@@ -4,9 +4,9 @@ import { IpcRendererEvent } from 'electron';
 import { ElectronService } from 'ngx-electron';
 import * as redis from 'redis';
 
-import { Config, RedisServerConfig } from '../../electron/config';
-import * as commands from '../../electron/commands';
-import * as notifications from '../../electron/notifications';
+import { Config, RedisServerConfig } from '../../../electron/config';
+import * as commands from '../../../electron/commands';
+import * as notifications from '../../../electron/notifications';
 
 @Injectable({
   providedIn: 'root'

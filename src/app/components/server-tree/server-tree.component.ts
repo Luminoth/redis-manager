@@ -6,9 +6,10 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Subscription } from 'rxjs';
 
-import { AppElectronService } from '../app-electron.service';
-import { RedisService } from '../redis.service';
-import { RedisServerConfig } from '../../../electron/config';
+import { AppElectronService } from '../../services/app-electron.service';
+import { RedisService } from '../../services/redis.service';
+
+import { RedisServerConfig } from '../../../../electron/config';
 
 interface RedisServerNode {
   expandable: boolean;
@@ -33,16 +34,8 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
     node => node.expandable
   );
 
-  private transformFunction = (node: RedisServerConfig, level: number) => {
-    return {
-      expandable: this.electron.redisConnections.has(node.name),
-      name: node.name,
-      level: level,
-    };
-  }
-
   private _treeFlattener = new MatTreeFlattener(
-    this.transformFunction, node => node.level, node => node.expandable, () => null);
+    this.transformer, node => node.level, node => node.expandable, () => null);
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this._treeFlattener);
 
@@ -75,6 +68,14 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
   }
 
   //#region Events
+
+  private transformer(node: RedisServerConfig, level: number) {
+    return {
+      expandable: this.electron ? this.electron.redisConnections.has(node.name) : false,
+      name: node.name,
+      level: level,
+    };
+  }
 
   onConnect(connection: string) {
     this.redis.connect(connection);

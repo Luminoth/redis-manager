@@ -7,13 +7,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
-import { AppElectronService } from '../app-electron.service';
-import { RedisService } from '../redis.service';
-import { ConnectionDialogComponent } from '../connection-dialog/connection-dialog.component';
-import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
-import * as notifications from '../../../electron/notifications';
+import { AppElectronService } from '../../services/app-electron.service';
+import { RedisService } from '../../services/redis.service';
+
+import { ConnectionDialogComponent } from '../../dialogs/connection-dialog/connection-dialog.component';
+import { SettingsDialogComponent } from '../../dialogs/settings-dialog/settings-dialog.component';
+
+import * as notifications from '../../../../electron/notifications';
 
 @Component({
   selector: 'app-app-view',

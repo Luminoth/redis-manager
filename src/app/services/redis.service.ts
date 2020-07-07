@@ -4,8 +4,8 @@ import { IpcRendererEvent } from 'electron';
 import { ElectronService } from 'ngx-electron';
 
 import { LogService } from './log.service';
-import * as commands from '../../electron/commands';
-import * as notifications from '../../electron/notifications';
+import * as commands from '../../../electron/commands';
+import * as notifications from '../../../electron/notifications';
 
 export interface RedisTestConnectStatus {
   host: string;

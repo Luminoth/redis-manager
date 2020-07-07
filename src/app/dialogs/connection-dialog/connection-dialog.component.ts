@@ -6,10 +6,11 @@ import { AbstractControl, FormBuilder, FormGroup, Validators, ValidatorFn, Valid
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { AppElectronService } from '../app-electron.service';
-import { Config } from '../../../electron/config';
-import { RedisService } from '../redis.service';
-import * as notifications from '../../../electron/notifications';
+import { AppElectronService } from '../../services/app-electron.service';
+import { RedisService } from '../../services/redis.service';
+
+import { Config } from '../../../../electron/config';
+import * as notifications from '../../../../electron/notifications';
 
 enum State {
   Idle,

@@ -1,0 +1,35 @@
+<div *ngIf="dataSource.data.length > 0; else noData">
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding class="button-row" fxLayout="row">
+      <button mat-icon-button disabled></button>
+      {{node.name}}
+      <span fxFlex></span>
+      <button mat-icon-button (click)="onConnect(node.name)">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-icon-button (click)="onRemoveConnection(node.name)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-tree-node>
+    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding class="button-row" fxLayout="row">
+      <button mat-icon-button matTreeNodeToggle>
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+      </button>
+      {{node.name}}
+      <span fxFlex></span>
+      <button mat-icon-button (click)="onDisconnect(node.name)">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <button mat-icon-button (click)="onRemoveConnection(node.name)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-tree-node>
+  </mat-tree>
+</div>
+<ng-template #noData>
+  <div class="container-15">
+    No connections
+  </div>
+</ng-template>
