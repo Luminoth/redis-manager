@@ -11,17 +11,23 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  imports: [
-    MatButtonModule, MatTreeModule, MatTabsModule, MatToolbarModule, MatIconModule, MatDialogModule,
-    MatFormFieldModule, MatInputModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule,
-    MatStepperModule
-  ],
   exports: [
-    MatButtonModule, MatTreeModule, MatTabsModule, MatToolbarModule, MatIconModule, MatDialogModule,
-    MatFormFieldModule, MatInputModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule,
-    MatStepperModule
+    MatButtonModule,
+    MatTreeModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatStepperModule,
+    MatTooltipModule
   ]
 })
 export class AppMaterialModule { }

@@ -1,8 +1,10 @@
 <mat-toolbar class="fixed mat-elevation-z6" color="primary">
   <mat-toolbar-row fxLayout="row">
-    <button mat-raised-button (click)=" onConnectRedis()">Connect to Redis</button>
+    <button mat-raised-button (click)=" onConnectRedis()" matTooltip="Connect to Redis" matTooltipPosition="above"
+      matTooltipShowDelay="500">Connect to Redis</button>
     <span fxFlex></span>
-    <button mat-raised-button (click)="onSettings()">Settings</button>
+    <button mat-raised-button (click)="onSettings()" matTooltip="Settings" matTooltipPosition="above"
+      matTooltipShowDelay="500">Settings</button>
   </mat-toolbar-row>
 </mat-toolbar>
 <div class="main-content">

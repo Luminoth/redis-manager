@@ -4,10 +4,12 @@
       <button mat-icon-button disabled></button>
       {{node.name}}
       <span fxFlex></span>
-      <button mat-icon-button (click)="onConnect(node.name)">
+      <button mat-icon-button (click)="onConnect(node.name)" matTooltip="Connect {{node.name}}"
+        matTooltipPosition="above" matTooltipShowDelay="500">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-icon-button (click)="onRemoveConnection(node.name)">
+      <button mat-icon-button (click)="onRemoveConnection(node.name)" matTooltip="Remove {{node.name}}"
+        matTooltipPosition="above" matTooltipShowDelay="500">
         <mat-icon>delete</mat-icon>
       </button>
     </mat-tree-node>
@@ -19,10 +21,12 @@
       </button>
       {{node.name}}
       <span fxFlex></span>
-      <button mat-icon-button (click)="onDisconnect(node.name)">
+      <button mat-icon-button (click)="onDisconnect(node.name)" matTooltip="Disconnect {{node.name}}"
+        matTooltipPosition="above" matTooltipShowDelay="500">
         <mat-icon>remove</mat-icon>
       </button>
-      <button mat-icon-button (click)="onRemoveConnection(node.name)">
+      <button mat-icon-button (click)="onRemoveConnection(node.name)" matTooltip="Remove {{node.name}}"
+        matTooltipPosition="above" matTooltipShowDelay="500">
         <mat-icon>delete</mat-icon>
       </button>
     </mat-tree-node>

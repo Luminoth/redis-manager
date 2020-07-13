@@ -73,7 +73,7 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
     return {
       expandable: this.electron ? this.electron.redisConnections.has(node.name) : false,
       name: node.name,
-      level: level,
+      level,
     };
   }
 
