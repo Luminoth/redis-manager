@@ -41,6 +41,8 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
 
   // subscriptions
   private _reloadSubscription: Subscription;
+  private _redisConnectSubscription: Subscription;
+  private _redisDisconnectSubscription: Subscription;
 
   //#region Lifecycle
 
@@ -51,6 +53,12 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
       this.dataSource.data = this.electron.config.redisConfig;
       this.cd.detectChanges();
     });
+
+    this._redisConnectSubscription = this.redis.redisConnectStatus$.subscribe(() => {
+    });
+
+    this._redisDisconnectSubscription = this.redis.redisDisconnect$.subscribe(() => {
+    });
   }
 
   ngOnInit() {
@@ -58,6 +66,8 @@ export class ServerTreeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this._redisDisconnectSubscription.unsubscribe();
+    this._redisConnectSubscription.unsubscribe();
     this._reloadSubscription.unsubscribe();
   }
 

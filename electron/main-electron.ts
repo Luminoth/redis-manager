@@ -231,6 +231,7 @@ function connectRedisConfig(connection: string, config: RedisServerConfig) {
 
   client.on('error', (err) => {
     console.error(`Redis Error (${connection}): ${err}`);
+    // TODO: disconnect?
     client.quit();
   });
 

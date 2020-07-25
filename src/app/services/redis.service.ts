@@ -49,28 +49,30 @@ export class RedisService {
     private zone: NgZone) {
     // electron callbacks need to run through NgZone so they run in the Angular zone
 
-    this.electron.ipcRenderer.on(notifications.RedisTestConnect, (_: IpcRendererEvent, host: string, port: number, status: notifications.RedisConnectStatus) => {
-      this.zone.run(() => {
-        this.log.appendLog(`${host}:${port}> test connect '${status}'`);
+    this.electron.ipcRenderer.on(notifications.RedisTestConnect,
+      (_: IpcRendererEvent, host: string, port: number, status: notifications.RedisConnectStatus) => {
+        this.zone.run(() => {
+          this.log.appendLog(`${host}:${port}> test connect '${status}'`);
 
-        this._redisTestConnectStatusSource.next({
-          host: host,
-          port: port,
-          status: status
+          this._redisTestConnectStatusSource.next({
+            host,
+            port,
+            status
+          });
         });
       });
-    });
 
-    this.electron.ipcRenderer.on(notifications.RedisConnect, (_: IpcRendererEvent, connection: string, status: notifications.RedisConnectStatus) => {
-      this.zone.run(() => {
-        this.log.appendLog(`${connection}> connect '${status}'`);
+    this.electron.ipcRenderer.on(notifications.RedisConnect,
+      (_: IpcRendererEvent, connection: string, status: notifications.RedisConnectStatus) => {
+        this.zone.run(() => {
+          this.log.appendLog(`${connection}> connect '${status}'`);
 
-        this._redisConnectStatusSource.next({
-          connection: connection,
-          status: status
+          this._redisConnectStatusSource.next({
+            connection,
+            status
+          });
         });
       });
-    });
 
     this.electron.ipcRenderer.on(notifications.RedisDisconnect, (_: IpcRendererEvent, connection: string) => {
       this.zone.run(() => {
@@ -85,8 +87,8 @@ export class RedisService {
         this.log.appendLog(`${connection}> [Resp] ${response}`);
 
         this._redisResponseSource.next({
-          connection: connection,
-          response: response
+          connection,
+          response
         });
       });
     });
