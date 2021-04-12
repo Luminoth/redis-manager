@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { BottomViewComponent } from './bottom-view.component';
 
@@ -6,7 +6,7 @@ describe('BottomViewComponent', () => {
   let component: BottomViewComponent;
   let fixture: ComponentFixture<BottomViewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BottomViewComponent ]
     })

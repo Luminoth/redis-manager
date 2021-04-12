@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LogViewComponent } from './log-view.component';
 
@@ -6,7 +6,7 @@ describe('LogViewComponent', () => {
   let component: LogViewComponent;
   let fixture: ComponentFixture<LogViewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LogViewComponent ]
     })

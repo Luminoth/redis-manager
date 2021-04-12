@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ConsoleViewComponent } from './console-view.component';
 
@@ -6,7 +6,7 @@ describe('ConsoleViewComponent', () => {
   let component: ConsoleViewComponent;
   let fixture: ComponentFixture<ConsoleViewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ConsoleViewComponent ]
     })
