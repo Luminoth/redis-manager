@@ -38,7 +38,7 @@
     "@angular/router": "~11.2.9",
     "angular-split": "^5.0.0",
     "core-js": "^2.6.12",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "ngx-electron": "^2.2.0",
     "npm": "^7.9.0",
     "redis": "^3.1.1",
